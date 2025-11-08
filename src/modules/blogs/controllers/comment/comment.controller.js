@@ -74,7 +74,10 @@ const addComment = asyncHandler(async (req, res) => {
       });
     }
 
-    const populatedComment = await Comment.findById(comment._id).populate("author", "fullName username avatar");
+    const populatedComment = await Comment.findById(comment._id).populate(
+      "author",
+      "firstName lastName fullName username avatar",
+    );
 
     const executionTime = Date.now() - startTime;
     logger.info("Comment added", {
@@ -116,7 +119,7 @@ const getComments = asyncHandler(async (req, res) => {
     // Optimized query without nested populate for better performance
     const [comments, total] = await Promise.all([
       Comment.find({ post: postId, parentComment: null })
-        .populate("author", "fullName username avatar")
+        .populate("author", "firstName lastName fullName username avatar")
         .sort(sort)
         .skip(skip)
         .limit(parseInt(limit))
@@ -149,4 +152,117 @@ const getComments = asyncHandler(async (req, res) => {
   }
 });
 
-export { addComment, getComments };
+// Like/Unlike comment
+const likeComment = asyncHandler(async (req, res) => {
+  const startTime = Date.now();
+  const { commentId } = req.params;
+  const userId = req.user._id;
+
+  try {
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      throw new ApiError(404, "Comment not found");
+    }
+
+    // Check if already liked
+    const likeIndex = comment.likes?.indexOf(userId);
+    const isLiked = likeIndex !== -1;
+
+    if (isLiked) {
+      // Unlike
+      comment.likes.splice(likeIndex, 1);
+      comment.likeCount = Math.max(0, (comment.likeCount || 0) - 1);
+    } else {
+      // Like
+      if (!comment.likes) {
+        comment.likes = [];
+      }
+      comment.likes.push(userId);
+      comment.likeCount = (comment.likeCount || 0) + 1;
+    }
+
+    await comment.save();
+
+    const executionTime = Date.now() - startTime;
+    logger.info("Comment like toggled", {
+      commentId,
+      userId,
+      isLiked: !isLiked,
+      executionTime,
+    });
+
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          isLiked: !isLiked,
+          likesCount: comment.likeCount,
+          meta: {
+            executionTime: `${executionTime}ms`,
+            apiHealth: calculateApiHealth(executionTime),
+          },
+        },
+        `Comment ${!isLiked ? "liked" : "unliked"} successfully`,
+      ),
+    );
+  } catch (error) {
+    handleControllerError(error, req, res, startTime, logger);
+  }
+});
+
+// Delete comment
+const deleteComment = asyncHandler(async (req, res) => {
+  const startTime = Date.now();
+  const { commentId } = req.params;
+  const userId = req.user._id;
+
+  try {
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      throw new ApiError(404, "Comment not found");
+    }
+
+    // Check if user is the author
+    if (comment.author.toString() !== userId.toString()) {
+      throw new ApiError(403, "You can only delete your own comments");
+    }
+
+    // Delete comment and update post count
+    await Promise.all([
+      Comment.findByIdAndDelete(commentId),
+      Post.findByIdAndUpdate(comment.post, { $inc: { "engagement.commentCount": -1 } }),
+    ]);
+
+    // If it's a reply, update parent comment
+    if (comment.parentComment) {
+      await Comment.findByIdAndUpdate(comment.parentComment, {
+        $inc: { replyCount: -1 },
+        $pull: { replies: commentId },
+      });
+    }
+
+    const executionTime = Date.now() - startTime;
+    logger.info("Comment deleted", {
+      commentId,
+      userId,
+      executionTime,
+    });
+
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          meta: {
+            executionTime: `${executionTime}ms`,
+            apiHealth: calculateApiHealth(executionTime),
+          },
+        },
+        "Comment deleted successfully",
+      ),
+    );
+  } catch (error) {
+    handleControllerError(error, req, res, startTime, logger);
+  }
+});
+
+export { addComment, getComments, likeComment, deleteComment };

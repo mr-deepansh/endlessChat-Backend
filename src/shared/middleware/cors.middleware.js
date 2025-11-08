@@ -1,6 +1,6 @@
 // src/shared/middleware/cors.middleware.js
 import cors from "cors";
-import { Logger } from "winston";
+import { logger } from "../../config/index.js";
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -24,7 +24,7 @@ const corsOptions = {
     }
 
     console.log(`❌ CORS Blocked - Origin: ${origin}`);
-    Logger.warn(`Blocked CORS request from: ${origin}`);
+    logger.warn(`Blocked CORS request from: ${origin}`);
     return callback(new Error("Not allowed by CORS"));
   },
 

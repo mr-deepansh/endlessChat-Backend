@@ -37,6 +37,7 @@ const commentSchema = new Schema(
     depth: { type: Number, default: 0, max: 5 }, // limit nesting depth
 
     // Engagement
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     likeCount: { type: Number, default: 0 },
 
     // Content features
@@ -50,6 +51,8 @@ const commentSchema = new Schema(
     isHidden: { type: Boolean, default: false },
     hiddenReason: String,
     isPinned: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: Date,
 
     // Analytics
     reportCount: { type: Number, default: 0 },
