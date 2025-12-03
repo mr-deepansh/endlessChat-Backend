@@ -82,17 +82,17 @@ router.get(
     const userId = req.user._id;
     const { days = 30 } = req.query;
 
-    // This would typically fetch real analytics data
-    const mockAnalytics = {
+    // TODO: Fetch real analytics data
+    const analytics = {
       summary: {
-        totalLogins: 150,
-        suspiciousEvents: 2,
-        overallRiskLevel: "low",
+        totalLogins: 0,
+        suspiciousEvents: 0,
+        overallRiskLevel: "unknown",
         period: `${days} days`,
       },
     };
 
-    const report = SecurityService.generateComplianceReport(mockAnalytics);
+    const report = SecurityService.generateComplianceReport(analytics);
 
     res.status(200).json(new ApiResponse(200, report, "Compliance report generated successfully"));
   }),

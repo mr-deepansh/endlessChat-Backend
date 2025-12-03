@@ -168,11 +168,9 @@ async function getLocationFromIP(ip) {
   }
 
   try {
-    // In production, replace with actual geolocation service
+    // TODO: Integrate with actual geolocation service
     // Example: const response = await fetch(`https://ipapi.co/${ip}/json/`);
     // const data = await response.json();
-
-    // Mock data for development
     return {
       country: "Unknown",
       region: "Unknown",

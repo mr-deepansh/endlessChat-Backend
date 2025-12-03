@@ -1047,18 +1047,16 @@ const getAdminById = asyncHandler(async (req, res) => {
       return res.status(200).json(new ApiResponse(200, cachedAdmin, "Admin profile from cache"));
     }
     // Execute parallel queries for comprehensive admin data
-    const [adminData, loginHistory, recentActivities, managedUsers] = await Promise.all([
+    const [adminData, managedUsers] = await Promise.all([
       User.findById(adminId).select("-password -refreshToken").lean(),
-      // Mock login history - replace with actual implementation
-      Promise.resolve([]),
-      // Mock activities - replace with actual implementation
-      Promise.resolve([]),
       // Count users managed by this admin
       User.countDocuments({
         createdBy: adminId,
         role: { $ne: "admin" },
       }),
     ]);
+    const loginHistory = [];
+    const recentActivities = [];
     if (!adminData) {
       throw new ApiError(404, "Admin not found");
     }
@@ -2182,9 +2180,9 @@ const bulkActions = asyncHandler(async (req, res) => {
           details:
             result.errors.length > 0
               ? {
-                errors: result.errors.slice(0, 10),
-                hasMoreErrors: result.errors.length > 10,
-              }
+                  errors: result.errors.slice(0, 10),
+                  hasMoreErrors: result.errors.length > 10,
+                }
               : undefined,
         },
         `Bulk ${action} completed`,
@@ -2214,47 +2212,27 @@ const getUserSecurityAnalysis = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found");
   }
   const startTime = Date.now();
-  // Mock security analysis for testing
+  // TODO: Implement actual security analysis
   const securityAnalysis = {
     riskAssessment: {
-      overallRisk: "LOW",
-      riskScore: 2,
+      overallRisk: "UNKNOWN",
+      riskScore: 0,
       factors: [],
     },
     activityPatterns: {
       lastLogin: null,
-      loginFrequency: "NORMAL",
+      loginFrequency: "UNKNOWN",
       suspiciousActivity: false,
     },
     deviceAnalysis: {
-      devices: [
-        {
-          deviceId: "device_1",
-          deviceType: "desktop",
-          browser: "Chrome",
-          os: "Windows",
-          lastUsed: new Date().toISOString(),
-          location: "Unknown",
-          isTrusted: true,
-        },
-      ],
-      totalDevices: 1,
-      trustedDevices: 1,
+      devices: [],
+      totalDevices: 0,
+      trustedDevices: 0,
     },
     sessionAnalysis: {
-      sessions: [
-        {
-          sessionId: "session_1",
-          loginTime: new Date().toISOString(),
-          logoutTime: null,
-          ipAddress: "192.168.1.1",
-          userAgent: "Mozilla/5.0...",
-          location: "Unknown",
-          isActive: true,
-        },
-      ],
-      totalSessions: 1,
-      activeSessions: 1,
+      sessions: [],
+      totalSessions: 0,
+      activeSessions: 0,
     },
     recommendations: [],
   };
@@ -2326,10 +2304,10 @@ const sendNotificationToUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, `Invalid channels: ${invalidChannels.join(", ")}`);
   }
   const notificationId = `notif_${Date.now()}_${id}`;
-  // Mock notification result for testing
+  // TODO: Implement actual notification sending
   const result = {
     notificationId,
-    delivered: true,
+    delivered: false,
     channels,
     timestamp: new Date().toISOString(),
     user: {
@@ -2413,8 +2391,8 @@ const forcePasswordReset = asyncHandler(async (req, res) => {
       return { user: updatedUser, resetToken };
     });
     if (notifyUser) {
-      // Mock notification sending
-      console.log(`Security notification sent to ${result.user.email}`);
+      // TODO: Implement actual notification sending
+      console.log(`Security notification would be sent to ${result.user.email}`);
     }
     // Clear cache (optional)
     try {
@@ -2463,28 +2441,11 @@ const getUserActivityLog = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  // Mock activity log for testing
+  // TODO: Implement actual activity log
   const activityLog = {
-    activities: [
-      {
-        id: "activity_1",
-        type: "LOGIN",
-        timestamp: new Date().toISOString(),
-        ipAddress: "192.168.1.1",
-        userAgent: "Mozilla/5.0...",
-        details: "User logged in successfully",
-      },
-      {
-        id: "activity_2",
-        type: "PROFILE_UPDATE",
-        timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-        ipAddress: "192.168.1.1",
-        userAgent: "Mozilla/5.0...",
-        details: "Profile information updated",
-      },
-    ],
-    totalActivities: 2,
-    lastActivity: new Date().toISOString(),
+    activities: [],
+    totalActivities: 0,
+    lastActivity: null,
   };
   return res.status(200).json(new ApiResponse(200, { activityLog }, "User activity log fetched"));
 });
@@ -2499,21 +2460,11 @@ const getUserLoginHistory = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  // Mock login history for testing
+  // TODO: Implement actual login history
   const loginHistory = {
-    sessions: [
-      {
-        sessionId: "session_1",
-        loginTime: new Date().toISOString(),
-        logoutTime: null,
-        ipAddress: "192.168.1.1",
-        userAgent: "Mozilla/5.0...",
-        location: "Unknown",
-        isActive: true,
-      },
-    ],
-    totalSessions: 1,
-    activeSessions: 1,
+    sessions: [],
+    totalSessions: 0,
+    activeSessions: 0,
   };
   return res.status(200).json(new ApiResponse(200, { loginHistory }, "User login history fetched"));
 });
@@ -2528,21 +2479,11 @@ const getUserDeviceInfo = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  // Mock device info for testing
+  // TODO: Implement actual device info
   const deviceInfo = {
-    devices: [
-      {
-        deviceId: "device_1",
-        deviceType: "desktop",
-        browser: "Chrome",
-        os: "Windows",
-        lastUsed: new Date().toISOString(),
-        location: "Unknown",
-        isTrusted: true,
-      },
-    ],
-    totalDevices: 1,
-    trustedDevices: 1,
+    devices: [],
+    totalDevices: 0,
+    trustedDevices: 0,
   };
   return res.status(200).json(new ApiResponse(200, { deviceInfo }, "User device info fetched"));
 });

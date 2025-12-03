@@ -233,13 +233,8 @@ export class SessionService {
   }
 
   async getLocationFromIP(ipAddress) {
-    const mockLocations = [
-      { region: "North America", country: "USA", city: "New York" },
-      { region: "Europe", country: "UK", city: "London" },
-      { region: "Asia", country: "India", city: "Mumbai" },
-    ];
-
-    return mockLocations[Math.floor(Math.random() * mockLocations.length)];
+    // TODO: Implement actual IP geolocation service
+    return { region: "Unknown", country: "Unknown", city: "Unknown" };
   }
 }
 

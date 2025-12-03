@@ -245,26 +245,10 @@ export class SystemService {
    * Emergency system lockdown
    */
   async emergencyLockdown(data) {
-    const { reason, duration = 3600, initiatedBy } = data;
-
-    const lockdownId = `lockdown_${Date.now()}`;
-    const expiresAt = new Date(Date.now() + duration * 1000);
-
-    // Mock lockdown implementation - in production, this would:
+    // TODO: Implement actual lockdown mechanism
     // 1. Set a global flag in Redis/database
     // 2. Update middleware to block requests
     // 3. Send notifications to all admins
-
-    return {
-      lockdownId,
-      status: "active",
-      reason,
-      duration,
-      initiatedBy,
-      initiatedAt: new Date(),
-      expiresAt,
-      affectedServices: ["user_registration", "password_reset", "api_access", "file_uploads"],
-      message: "System is temporarily locked down for security reasons",
-    };
+    throw new Error("Emergency lockdown not implemented");
   }
 }

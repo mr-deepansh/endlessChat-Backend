@@ -3,7 +3,7 @@ import { User } from "../../users/models/user.model.js";
 import { ApiError } from "../../../shared/utils/ApiError.js";
 import { ApiResponse } from "../../../shared/utils/ApiResponse.js";
 import { asyncHandler } from "../../../shared/utils/AsyncHandler.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { Logger } from "../../../shared/utils/Logger.js";
 import { createSuperAdminSchema, createAdminSchema } from "../validators/super-admin.validator.js";
 import { z } from "zod";
@@ -578,32 +578,16 @@ const getAuditLogs = asyncHandler(async (req, res) => {
         filter.createdAt.$lte = new Date(dateTo);
       }
     }
-    // Mock audit logs - replace with actual AuditLog model
-    const mockAuditLogs = Array.from({ length: parseInt(limit) }, (_, i) => ({
-      _id: `audit_${Date.now()}_${i}`,
-      action: action || ["CREATE_ADMIN", "DELETE_ADMIN", "UPDATE_USER", "LOGIN"][Math.floor(Math.random() * 4)],
-      adminId: adminId || `admin_${i + 1}`,
-      adminUsername: `admin${i + 1}`,
-      targetUserId: `user_${i + 1}`,
-      details: {
-        ipAddress: `192.168.1.${Math.floor(Math.random() * 255)}`,
-        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        resource: "admin_panel",
-        method: "POST",
-      },
-      criticality: criticality || ["LOW", "MEDIUM", "HIGH", "CRITICAL"][Math.floor(Math.random() * 4)],
-      status: "SUCCESS",
-      createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-      executionTime: Math.floor(Math.random() * 500) + 50,
-    }));
-    const totalCount = 1000; // Mock total
-    const totalPages = Math.ceil(totalCount / parseInt(limit));
+    // TODO: Implement with actual AuditLog model
+    const auditLogs = [];
+    const totalCount = 0;
+    const totalPages = 0;
     const executionTime = Date.now() - startTime;
     return res.status(200).json(
       new ApiResponse(
         200,
         {
-          auditLogs: mockAuditLogs,
+          auditLogs,
           pagination: {
             currentPage: parseInt(page),
             totalPages,

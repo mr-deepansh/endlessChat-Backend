@@ -1,6 +1,6 @@
 // src/modules/users/models/user.model.js
 import mongoose, { Schema } from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 import crypto from "crypto";
 

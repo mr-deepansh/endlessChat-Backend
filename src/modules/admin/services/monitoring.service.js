@@ -81,8 +81,8 @@ export class MonitoringService {
    */
   async checkRedisHealth() {
     try {
-      // Mock Redis health check - implement with actual Redis client
-      return "connected";
+      // TODO: Implement with actual Redis client
+      return "unknown";
     } catch (error) {
       return "disconnected";
     }

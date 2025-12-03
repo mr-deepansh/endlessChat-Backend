@@ -2,7 +2,7 @@
 import { User } from "../models/user.model.js";
 import { CacheService } from "../../../shared/utils/Cache.js";
 import { ApiError } from "../../../shared/utils/ApiError.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { ProfileService } from "./profile.service.js";
 
 export class UserService {

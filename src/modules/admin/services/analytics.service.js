@@ -200,34 +200,15 @@ export class AnalyticsService {
    * @param {string} cohortPeriod - Cohort period (weekly, monthly)
    */
   async getRetentionAnalytics(cohortPeriod = "monthly") {
-    // Mock retention data for now - implement based on user activity tracking
-    const cohorts = [];
-    const currentDate = new Date();
-
-    for (let i = 0; i < 6; i++) {
-      const cohortDate = new Date(currentDate);
-      cohortDate.setMonth(cohortDate.getMonth() - i);
-
-      cohorts.push({
-        cohort: cohortDate.toISOString().slice(0, 7), // YYYY-MM format
-        users: Math.floor(Math.random() * 1000) + 100,
-        retention: {
-          week1: Math.floor(Math.random() * 30) + 70,
-          week2: Math.floor(Math.random() * 20) + 50,
-          week4: Math.floor(Math.random() * 15) + 35,
-          week8: Math.floor(Math.random() * 10) + 25,
-        },
-      });
-    }
-
+    // TODO: Implement based on user activity tracking
     return {
       cohortPeriod,
-      cohorts: cohorts.reverse(),
+      cohorts: [],
       averageRetention: {
-        week1: Math.round(cohorts.reduce((sum, c) => sum + c.retention.week1, 0) / cohorts.length),
-        week2: Math.round(cohorts.reduce((sum, c) => sum + c.retention.week2, 0) / cohorts.length),
-        week4: Math.round(cohorts.reduce((sum, c) => sum + c.retention.week4, 0) / cohorts.length),
-        week8: Math.round(cohorts.reduce((sum, c) => sum + c.retention.week8, 0) / cohorts.length),
+        week1: 0,
+        week2: 0,
+        week4: 0,
+        week8: 0,
       },
     };
   }

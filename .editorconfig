@@ -5,9 +5,18 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+# Default: use tabs (backend code, configs, TS/JS)
 indent_style = tab
 indent_size = 2
 
+# Override: JSON, YAML, MD must use spaces
 [*.{json,yml,yaml,md}]
+indent_style = space
+indent_size = 2
+
+# Optional: Shell scripts must always use LF
+[*.sh]
+end_of_line = lf
 indent_style = space
 indent_size = 2
