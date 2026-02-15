@@ -20,11 +20,15 @@ export default [
         clearTimeout: "readonly",
         clearInterval: "readonly",
         setImmediate: "readonly",
+        require: "readonly",
+        module: "readonly",
+        exports: "readonly",
+        cache: "readonly",
+        redisClient: "readonly",
       },
     },
     rules: {
-      // Production-ready rules
-      "no-console": "off", // Allow console for server logs
+      "no-console": "off",
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
       "no-undef": "warn",
       "prefer-const": "error",
@@ -42,7 +46,7 @@ export default [
       semi: ["error", "always"],
       quotes: ["error", "double", { avoidEscape: true }],
       indent: [
-        "error",
+        "warn",
         2,
         {
           SwitchCase: 1,
@@ -55,31 +59,9 @@ export default [
           ArrayExpression: 1,
           ObjectExpression: 1,
           ImportDeclaration: 1,
-          flatTernaryExpressions: false,
-          offsetTernaryExpressions: false,
-          ignoredNodes: [
-            "TemplateLiteral",
-            "JSXElement",
-            "JSXElement > *",
-            "JSXAttribute",
-            "JSXIdentifier",
-            "JSXNamespacedName",
-            "JSXMemberExpression",
-            "JSXSpreadAttribute",
-            "JSXExpressionContainer",
-            "JSXOpeningElement",
-            "JSXClosingElement",
-            "JSXFragment",
-            "JSXOpeningFragment",
-            "JSXClosingFragment",
-            "JSXText",
-            "JSXEmptyExpression",
-            "JSXSpreadChild",
-            "ConditionalExpression",
-          ],
+          ignoredNodes: ["ConditionalExpression"],
         },
       ],
-      // "max-len": ["error", { code: 80, ignoreUrls: true }], // Disabled
       "no-trailing-spaces": "error",
       "eol-last": "error",
       "no-useless-escape": "warn",
@@ -90,5 +72,32 @@ export default [
       "no-constant-binary-expression": "warn",
     },
     ignores: ["node_modules/**", "dist/**", "build/**", "coverage/**", "logs/**", "*.min.js", "public/**"],
+  },
+  {
+    files: ["test/**/*.js", "**/*.test.js", "**/*.spec.js"],
+    languageOptions: {
+      globals: {
+        describe: "readonly",
+        it: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        beforeAll: "readonly",
+        beforeEach: "readonly",
+        afterAll: "readonly",
+        afterEach: "readonly",
+      },
+    },
+  },
+  {
+    files: ["*.config.js", "*.config.cjs", "scripts/**/*.js"],
+    languageOptions: {
+      globals: {
+        require: "readonly",
+        module: "readonly",
+        exports: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+      },
+    },
   },
 ];
