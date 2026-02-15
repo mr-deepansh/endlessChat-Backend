@@ -86,9 +86,9 @@ const createRedisConfig = (options = {}) => {
     tls:
       process.env.REDIS_TLS === "true"
         ? {
-          servername: process.env.REDIS_HOST,
-          rejectUnauthorized: process.env.REDIS_TLS_REJECT_UNAUTHORIZED !== "false",
-        }
+            servername: process.env.REDIS_HOST,
+            rejectUnauthorized: process.env.REDIS_TLS_REJECT_UNAUTHORIZED !== "false",
+          }
         : undefined,
 
     // Reconnection strategy

@@ -268,7 +268,7 @@ export class SecurityService {
         ? mockAttempts
         : mockAttempts.filter(attempt =>
             status === "success" ? attempt.status === "success" : attempt.status === "failed",
-        );
+          );
 
     return {
       data: filteredAttempts,

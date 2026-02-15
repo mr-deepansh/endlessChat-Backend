@@ -80,13 +80,13 @@ export class ProfileService {
           isOwnProfile: currentUserId ? { $eq: ["$_id", new mongoose.Types.ObjectId(currentUserId)] } : false,
           isFollowing: currentUserId
             ? {
-              $in: [new mongoose.Types.ObjectId(currentUserId), "$followers"],
-            }
+                $in: [new mongoose.Types.ObjectId(currentUserId), "$followers"],
+              }
             : false,
           followsYou: currentUserId
             ? {
-              $in: [new mongoose.Types.ObjectId(currentUserId), "$following"],
-            }
+                $in: [new mongoose.Types.ObjectId(currentUserId), "$following"],
+              }
             : false,
           fullName: {
             $concat: [{ $ifNull: ["$firstName", ""] }, " ", { $ifNull: ["$lastName", ""] }],
