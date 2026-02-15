@@ -60,7 +60,7 @@ const getAdminSessionAnalytics = asyncHandler(async (req, res) => {
         sessionAnalytics.reduce((sum, admin) => sum + (admin.avgDuration || 0), 0) /
           Math.max(sessionAnalytics.length, 1),
       ),
-      uniqueRegions: [...new Set(sessionAnalytics.flatMap(admin => admin.regions))].length,
+      uniqueRegions: [...new Set(sessionAnalytics.flatMap((admin) => admin.regions))].length,
     },
     metadata: {
       generatedAt: new Date().toISOString(),

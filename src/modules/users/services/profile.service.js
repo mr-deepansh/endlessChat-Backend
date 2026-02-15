@@ -228,8 +228,8 @@ export class ProfileService {
         return { isFollowing: false, followsYou: false, error: "User not found" };
       }
 
-      const isFollowing = currentUser.following?.some(id => id.toString() === targetUserId.toString()) || false;
-      const followsYou = targetUser.followers?.some(id => id.toString() === currentUserId.toString()) || false;
+      const isFollowing = currentUser.following?.some((id) => id.toString() === targetUserId.toString()) || false;
+      const followsYou = targetUser.followers?.some((id) => id.toString() === currentUserId.toString()) || false;
 
       return { isFollowing, followsYou };
     } catch (error) {

@@ -99,7 +99,7 @@ export class ValidationService {
 
     const validChannels = ["email", "sms", "push", "in-app"];
     if (channels && Array.isArray(channels)) {
-      const invalidChannels = channels.filter(ch => !validChannels.includes(ch));
+      const invalidChannels = channels.filter((ch) => !validChannels.includes(ch));
       if (invalidChannels.length > 0) {
         throw new ApiError(400, `Invalid channels: ${invalidChannels.join(", ")}`);
       }

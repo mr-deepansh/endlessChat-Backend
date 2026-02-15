@@ -11,9 +11,9 @@ const FALLBACK_CACHE_TTL = 300; // 5 minutes
 const MAX_RETRY_ATTEMPTS = 3;
 
 // Optimized cache operations for millions of users
-const isTokenBlacklisted = async token => await CacheService.isTokenBlacklisted(token);
+const isTokenBlacklisted = async (token) => await CacheService.isTokenBlacklisted(token);
 
-const getCachedUser = async userId => await CacheService.getCachedUser(userId);
+const getCachedUser = async (userId) => await CacheService.getCachedUser(userId);
 
 const setCachedUser = async (userId, userData, ttl = 300) => await CacheService.cacheUser(userId, userData, ttl);
 

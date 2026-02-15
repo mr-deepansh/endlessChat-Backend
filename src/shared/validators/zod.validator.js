@@ -14,7 +14,7 @@ export const zodValidation = {
         .max(30, "Username cannot exceed 30 characters")
         .regex(/^[a-zA-Z0-9._]+$/, "Username can only contain letters, numbers, dots, underscores")
         .refine(
-          username => {
+          (username) => {
             // Security validations
             const securityChecks = [
               // Cannot start or end with special characters
@@ -63,13 +63,13 @@ export const zodValidation = {
               // Prevent SQL injection patterns (basic)
               !/(union|select|insert|update|delete|drop|create|alter|exec|script)/i.test(username),
             ];
-            return securityChecks.every(check => check);
+            return securityChecks.every((check) => check);
           },
           {
             message: "Username format is invalid or contains restricted content",
           },
         )
-        .transform(username => username.toLowerCase()),
+        .transform((username) => username.toLowerCase()),
       email: z.string().email("Enter a valid email").trim().toLowerCase(),
       password: z
         .string()
@@ -83,11 +83,11 @@ export const zodValidation = {
       role: z.enum(["user", "admin", "moderator"]).optional(),
     })
     .strict()
-    .refine(data => data.password === data.confirmPassword, {
+    .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords don't match",
       path: ["confirmPassword"],
     })
-    .refine(data => data.username !== data.password, {
+    .refine((data) => data.username !== data.password, {
       message: "Username and password cannot be the same",
       path: ["password"],
     }),
@@ -105,7 +105,7 @@ export const zodValidation = {
       password: z.string().min(1, "Password is required"),
     })
     .strict()
-    .refine(data => data.username || data.email, {
+    .refine((data) => data.username || data.email, {
       message: "Either username or email is required",
       path: ["username"], // This will show error on username field
     }),
@@ -139,7 +139,7 @@ export const zodValidation = {
       rememberMe: z.boolean().optional().default(false),
     })
     .strict()
-    .refine(data => data.identifier || data.username || data.email, {
+    .refine((data) => data.identifier || data.username || data.email, {
       message: "Username, email, or identifier is required",
       path: ["identifier"],
     }),
@@ -153,7 +153,7 @@ export const zodValidation = {
         .min(3)
         .max(30)
         .regex(/^[a-zA-Z0-9._]+$/, "Username can only contain letters, numbers, dots, and underscores")
-        .refine(username => {
+        .refine((username) => {
           if (!username) {
             return true;
           } // Skip validation if optional and empty
@@ -163,9 +163,9 @@ export const zodValidation = {
             /[a-zA-Z0-9]/.test(username),
             !/^\d+$/.test(username),
           ];
-          return securityChecks.every(check => check);
+          return securityChecks.every((check) => check);
         }, "Invalid username format")
-        .transform(username => (username ? username.toLowerCase() : username))
+        .transform((username) => (username ? username.toLowerCase() : username))
         .optional(),
       email: z.string().email().trim().toLowerCase().optional(),
       firstName: z.string().min(2).max(50).trim().optional(),
@@ -195,10 +195,10 @@ export const zodValidation = {
       sortBy: z.enum(["relevance", "followers", "newest", "username"]).optional(),
       includePrivate: z
         .string()
-        .transform(val => val === "true")
+        .transform((val) => val === "true")
         .optional(),
     })
-    .refine(data => data.search || data.username || data.firstName || data.lastName, {
+    .refine((data) => data.search || data.username || data.firstName || data.lastName, {
       message: "At least one search parameter is required",
       path: ["search"],
     }),
@@ -212,7 +212,7 @@ export const zodValidation = {
         .min(3)
         .max(30)
         .regex(/^[a-zA-Z0-9._]+$/, "Username can only contain letters, numbers, dots, and underscores")
-        .refine(username => {
+        .refine((username) => {
           if (!username) {
             return true;
           } // Skip validation if optional and empty
@@ -222,9 +222,9 @@ export const zodValidation = {
             /[a-zA-Z0-9]/.test(username),
             !/^\d+$/.test(username),
           ];
-          return securityChecks.every(check => check);
+          return securityChecks.every((check) => check);
         }, "Invalid username format")
-        .transform(username => (username ? username.toLowerCase() : username))
+        .transform((username) => (username ? username.toLowerCase() : username))
         .optional(),
       firstName: z.string().min(2).max(50).trim().optional(),
       lastName: z.string().min(2).max(50).trim().optional(),
@@ -246,11 +246,11 @@ export const zodValidation = {
       confirmNewPassword: z.string(),
     })
     .strict()
-    .refine(data => data.newPassword === data.confirmNewPassword, {
+    .refine((data) => data.newPassword === data.confirmNewPassword, {
       message: "New passwords don't match",
       path: ["confirmNewPassword"],
     })
-    .refine(data => data.currentPassword !== data.newPassword, {
+    .refine((data) => data.currentPassword !== data.newPassword, {
       message: "New password must be different from current password",
       path: ["newPassword"],
     }),
@@ -313,7 +313,7 @@ export const validateLogin = (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: "Validation failed",
-        errors: error.errors.map(err => ({
+        errors: error.errors.map((err) => ({
           field: err.path.join("."),
           message: err.message,
         })),
@@ -337,7 +337,7 @@ export const validateFlexibleLogin = (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: "Validation failed",
-        errors: error.errors.map(err => ({
+        errors: error.errors.map((err) => ({
           field: err.path.join("."),
           message: err.message,
         })),

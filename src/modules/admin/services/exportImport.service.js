@@ -81,7 +81,7 @@ export class ExportImportService {
             if (!validateOnly) {
               await User.insertMany(batch);
               result.successful += batch.length;
-              result.details.createdUsers.push(...batch.map(u => u.email));
+              result.details.createdUsers.push(...batch.map((u) => u.email));
             } else {
               result.successful += batch.length;
             }
@@ -109,7 +109,7 @@ export class ExportImportService {
       if (batch.length > 0 && !validateOnly) {
         await User.insertMany(batch);
         result.successful += batch.length;
-        result.details.createdUsers.push(...batch.map(u => u.email));
+        result.details.createdUsers.push(...batch.map((u) => u.email));
       }
     } catch (error) {
       throw new Error(`CSV processing failed: ${error.message}`);
@@ -140,7 +140,7 @@ export class ExportImportService {
       const csvStream = csv.format({ headers: true });
       csvStream.pipe(res);
 
-      userStream.on("data", user => {
+      userStream.on("data", (user) => {
         const userData = this.formatUserForExport(user, fields);
         csvStream.write(userData);
       });
@@ -152,7 +152,7 @@ export class ExportImportService {
       res.write("[\n");
       let isFirst = true;
 
-      userStream.on("data", user => {
+      userStream.on("data", (user) => {
         const userData = this.formatUserForExport(user, fields);
         if (!isFirst) {
           res.write(",\n");
@@ -169,7 +169,7 @@ export class ExportImportService {
       throw new Error(`Unsupported export format: ${format}`);
     }
 
-    userStream.on("error", error => {
+    userStream.on("error", (error) => {
       console.error("Export stream error:", error);
       if (!res.headersSent) {
         res.status(500).json({ error: "Export failed" });
@@ -199,7 +199,7 @@ export class ExportImportService {
         JSON.stringify(
           {
             metadata,
-            users: users.map(user => this.formatUserForExport(user)),
+            users: users.map((user) => this.formatUserForExport(user)),
           },
           null,
           2,
@@ -224,15 +224,15 @@ export class ExportImportService {
       const rows = [];
       csv
         .parseString(content, { headers: true })
-        .on("data", row => rows.push(row))
+        .on("data", (row) => rows.push(row))
         .on("end", () => resolve(rows))
-        .on("error", error => reject(error));
+        .on("error", (error) => reject(error));
     });
   }
 
   validateUserRow(row) {
     const requiredFields = ["email", "username"];
-    const missingFields = requiredFields.filter(field => !row[field]);
+    const missingFields = requiredFields.filter((field) => !row[field]);
 
     if (missingFields.length > 0) {
       throw new Error(`Missing required fields: ${missingFields.join(", ")}`);
@@ -269,7 +269,7 @@ export class ExportImportService {
 
     if (fields && fields.length > 0) {
       const filteredData = {};
-      fields.forEach(field => {
+      fields.forEach((field) => {
         if (userData[field] !== undefined) {
           filteredData[field] = userData[field];
         }

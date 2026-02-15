@@ -23,10 +23,10 @@ const healthCheck = () => {
     };
 
     const protocol = HTTPS_ENABLED ? https : http;
-    const req = protocol.request(options, res => {
+    const req = protocol.request(options, (res) => {
       let data = "";
 
-      res.on("data", chunk => {
+      res.on("data", (chunk) => {
         data += chunk;
       });
 
@@ -39,7 +39,7 @@ const healthCheck = () => {
       });
     });
 
-    req.on("error", error => {
+    req.on("error", (error) => {
       reject({ status: "error", error: error.message });
     });
 

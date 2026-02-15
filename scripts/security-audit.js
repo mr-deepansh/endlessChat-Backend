@@ -140,16 +140,16 @@ const runAudit = () => {
   checkPasswordPolicy();
 
   console.log("\n✅ Passed Checks:", audit.passed.length);
-  audit.passed.forEach(item => console.log(`  ✓ ${item}`));
+  audit.passed.forEach((item) => console.log(`  ✓ ${item}`));
 
   if (audit.warnings.length > 0) {
     console.log("\n⚠️  Warnings:", audit.warnings.length);
-    audit.warnings.forEach(item => console.log(`  ⚠ ${item}`));
+    audit.warnings.forEach((item) => console.log(`  ⚠ ${item}`));
   }
 
   if (audit.failed.length > 0) {
     console.log("\n❌ Failed Checks:", audit.failed.length);
-    audit.failed.forEach(item => console.log(`  ✗ ${item}`));
+    audit.failed.forEach((item) => console.log(`  ✗ ${item}`));
   }
 
   console.log(`\n${"=".repeat(50)}`);

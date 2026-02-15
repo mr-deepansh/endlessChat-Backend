@@ -19,7 +19,7 @@ import { accessTokenOptions, refreshTokenOptions } from "../../../shared/utils/c
 
 const logger = new Logger("UserController");
 
-const generateAccessAndRefreshTokens = async userId => {
+const generateAccessAndRefreshTokens = async (userId) => {
   return await AuthService.generateTokens(userId);
 };
 
@@ -749,7 +749,7 @@ const getUserFollowers = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       {
-        followers: followers.map(follower => ({
+        followers: followers.map((follower) => ({
           ...follower,
           avatar: follower.avatar || "/assets/default-avatar.png",
           bio: follower.bio || "",
@@ -899,7 +899,7 @@ const getUserFollowing = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       {
-        following: following.map(user => ({
+        following: following.map((user) => ({
           ...user,
           avatar: user.avatar || "/assets/default-avatar.png",
           bio: user.bio || "",
@@ -1166,7 +1166,7 @@ const getUserSuggestions = asyncHandler(async (req, res) => {
     const suggestions = await User.aggregate(pipeline);
 
     // Enhanced formatting with better suggestion reasons
-    const formattedSuggestions = suggestions.map(user => {
+    const formattedSuggestions = suggestions.map((user) => {
       let suggestionReason = "Suggested for you";
       if (user.followsYou) {
         suggestionReason = "Follows you";
@@ -1233,7 +1233,7 @@ const getUserFeed = asyncHandler(async (req, res) => {
     console.log(`\n🔍 [REDIS FEED] Checking cache for key: ${cacheKey}`);
     const startCacheCheck = Date.now();
 
-    const cachedFeed = await cacheRedis.get(cacheKey).catch(err => {
+    const cachedFeed = await cacheRedis.get(cacheKey).catch((err) => {
       console.error("⚠️ [REDIS FEED ERROR] Cache check failed:", err.message);
       return null;
     });
@@ -1353,7 +1353,7 @@ const getUserFeed = asyncHandler(async (req, res) => {
     const totalPosts = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
     const totalPages = Math.ceil(totalPosts / limitNum);
 
-    const formattedFeed = feed.map(post => {
+    const formattedFeed = feed.map((post) => {
       const author = post.author || {};
       return {
         ...post,
@@ -1369,8 +1369,8 @@ const getUserFeed = asyncHandler(async (req, res) => {
               ? `${author.firstName} ${author.lastName}`.trim()
               : author.username || "Unknown User",
         },
-        images: post.images?.map(img => img.url || img) || [],
-        videos: post.videos?.map(vid => vid.url || vid) || [],
+        images: post.images?.map((img) => img.url || img) || [],
+        videos: post.videos?.map((vid) => vid.url || vid) || [],
         likesCount: post.likesCount || 0,
         commentsCount: post.commentsCount || 0,
         sharesCount: post.sharesCount || 0,
@@ -1403,7 +1403,7 @@ const getUserFeed = asyncHandler(async (req, res) => {
       `⏰ [REDIS FEED] Setting TTL: ${CACHE_TTL} seconds (${Math.floor(CACHE_TTL / 60)}m ${CACHE_TTL % 60}s)`,
     );
 
-    await cacheRedis.setex(cacheKey, CACHE_TTL, JSON.stringify(responseData)).catch(err => {
+    await cacheRedis.setex(cacheKey, CACHE_TTL, JSON.stringify(responseData)).catch((err) => {
       console.error("⚠️ [REDIS FEED ERROR] Failed to cache feed:", err.message);
     });
 
@@ -1642,7 +1642,7 @@ const getUserProfileByUsername = asyncHandler(async (req, res) => {
           ? {
               count: profile.mutualFollowersCount,
               sample:
-                profile.mutualFollowersSample?.map(user => ({
+                profile.mutualFollowersSample?.map((user) => ({
                   ...user,
                   avatar: user.avatar || "/assets/default-avatar.png",
                   displayName: `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.username,
@@ -1710,7 +1710,7 @@ const followUser = asyncHandler(async (req, res) => {
       throw new ApiError(404, "User session invalid");
     }
 
-    const isCurrentlyFollowing = currentUser.following?.some(id => id.toString() === userId.toString()) || false;
+    const isCurrentlyFollowing = currentUser.following?.some((id) => id.toString() === userId.toString()) || false;
     const action = isCurrentlyFollowing ? "unfollow" : "follow";
 
     const result = await safeAsyncOperation(
@@ -1793,7 +1793,7 @@ const unfollowUser = asyncHandler(async (req, res) => {
 });
 
 // Utility function for time ago calculation
-const getTimeAgo = date => {
+const getTimeAgo = (date) => {
   const now = new Date();
   const postDate = new Date(date);
   const diffInSeconds = Math.floor((now - postDate) / 1000);

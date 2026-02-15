@@ -1,40 +1,28 @@
-// .prettierrc.js
 export default {
   useTabs: false,
   tabWidth: 2,
-  singleQuote: false, // ✅ Force double quotes
-  quoteProps: "as-needed",
   semi: true,
+  singleQuote: false,
   trailingComma: "all",
   bracketSpacing: true,
   bracketSameLine: false,
+  arrowParens: "always",
   printWidth: 120,
   proseWrap: "preserve",
-  arrowParens: "avoid",
   endOfLine: "lf",
   insertPragma: false,
   requirePragma: false,
   overrides: [
     {
-      files: "*.json",
+      files: ["*.json", "*.yml", "*.yaml"],
       options: {
-        useTabs: false,
         tabWidth: 2,
       },
     },
     {
       files: "*.md",
       options: {
-        useTabs: false,
-        tabWidth: 2,
         proseWrap: "always",
-      },
-    },
-    {
-      files: "package.json",
-      options: {
-        useTabs: false,
-        tabWidth: 2,
       },
     },
   ],

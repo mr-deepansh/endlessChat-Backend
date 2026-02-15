@@ -39,7 +39,7 @@ try {
 
 // Handle Redis connection errors with fallback
 if (redis) {
-  redis.on("error", err => {
+  redis.on("error", (err) => {
     redisHealthy = false;
     rateLimitLogger.warn("Redis connection error for rate limiting", { error: err.message });
   });
@@ -81,7 +81,7 @@ const createStore = () => {
 };
 
 // Enhanced key generation for better security
-const keyGenerator = req => {
+const keyGenerator = (req) => {
   // Prioritize authenticated users
   if (req.user?.id) {
     return `user:${req.user.id}`;
@@ -106,7 +106,7 @@ const keyGenerator = req => {
 };
 
 // Enhanced skip logic
-const skipRequest = req => {
+const skipRequest = (req) => {
   // Always skip in development
   if (process.env.NODE_ENV === "development") {
     return true;
@@ -269,14 +269,14 @@ export const authRateLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false,
 
-  keyGenerator: req => {
+  keyGenerator: (req) => {
     const ip = req.ip || req.socket?.remoteAddress || "unknown";
     const identifier = req.body?.email || req.body?.username || req.body?.phone || "unknown";
 
     return `auth:${createHash("sha256").update(`${ip}:${identifier}:auth_salt`).digest("hex").substring(0, 20)}`;
   },
 
-  skip: req => process.env.NODE_ENV === "development",
+  skip: (req) => process.env.NODE_ENV === "development",
 
   handler: (req, res, next, options) => {
     const logData = {

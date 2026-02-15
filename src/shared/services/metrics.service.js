@@ -166,8 +166,8 @@ export class MetricsCollector {
       return null;
     }
 
-    const durations = arr.map(d => d.duration).sort((a, b) => a - b);
-    const percentile = p => {
+    const durations = arr.map((d) => d.duration).sort((a, b) => a - b);
+    const percentile = (p) => {
       const idx = (p / 100) * (durations.length - 1);
       const lo = Math.floor(idx),
         hi = Math.ceil(idx);

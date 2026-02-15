@@ -15,7 +15,7 @@ const authorizeRoles = (...allowedRoles) => {
 };
 
 // Check if user has higher or equal role level
-const authorizeMinimumRole = minimumRole => {
+const authorizeMinimumRole = (minimumRole) => {
   return (req, res, next) => {
     const userRole = req.user?.role;
 

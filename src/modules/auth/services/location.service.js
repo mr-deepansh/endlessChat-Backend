@@ -325,8 +325,8 @@ class LocationService {
       return "low";
     }
 
-    const highRiskCount = suspiciousActivity.filter(activity => activity.riskLevel === "high").length;
-    const mediumRiskCount = suspiciousActivity.filter(activity => activity.riskLevel === "medium").length;
+    const highRiskCount = suspiciousActivity.filter((activity) => activity.riskLevel === "high").length;
+    const mediumRiskCount = suspiciousActivity.filter((activity) => activity.riskLevel === "medium").length;
     if (highRiskCount > 0) {
       return "high";
     }
@@ -363,7 +363,7 @@ class LocationService {
     await activity.save();
     // Invalidate related caches
     const cacheKeys = [`user_locations:${userId}:*`, `location_analytics:${userId}:*`];
-    await Promise.all(cacheKeys.map(pattern => cacheService.deletePattern(pattern)));
+    await Promise.all(cacheKeys.map((pattern) => cacheService.deletePattern(pattern)));
     return activity;
   }
 }

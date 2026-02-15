@@ -60,12 +60,12 @@ export const generateSecureToken = (length = 32) => {
 };
 
 // Hash sensitive data
-export const hashData = data => {
+export const hashData = (data) => {
   return crypto.createHash("sha256").update(data).digest("hex");
 };
 
 // Encrypt sensitive data
-export const encryptData = data => {
+export const encryptData = (data) => {
   const algorithm = "aes-256-cbc";
   const key = crypto.scryptSync(process.env.ENCRYPTION_KEY, "salt", 32);
   const iv = crypto.randomBytes(16);
@@ -78,7 +78,7 @@ export const encryptData = data => {
 };
 
 // Decrypt sensitive data
-export const decryptData = encryptedData => {
+export const decryptData = (encryptedData) => {
   const algorithm = "aes-256-cbc";
   const key = crypto.scryptSync(process.env.ENCRYPTION_KEY, "salt", 32);
 

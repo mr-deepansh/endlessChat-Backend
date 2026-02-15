@@ -29,7 +29,7 @@ const redisConfig = {
   keepAlive: true,
 
   // Reconnection strategy
-  retryStrategy: times => {
+  retryStrategy: (times) => {
     const delay = Math.min(times * 50, 2000);
     logger.info(`Attempting Redis reconnection ${times}, delay: ${delay}ms`);
     return delay;
@@ -68,7 +68,7 @@ try {
   redisClient.on("ready", () => {
     logger.info("Redis client ready");
   });
-  redisClient.on("error", err => {
+  redisClient.on("error", (err) => {
     logger.error("Redis client error:", err);
   });
   redisClient.on("close", () => {

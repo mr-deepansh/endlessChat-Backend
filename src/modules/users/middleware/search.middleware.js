@@ -24,7 +24,7 @@ class SearchCache {
 
     // Sort keys for consistent cache keys
     const sortedKeys = Object.keys(keyData).sort();
-    const keyString = sortedKeys.map(key => `${key}:${keyData[key]}`).join("|");
+    const keyString = sortedKeys.map((key) => `${key}:${keyData[key]}`).join("|");
 
     return Buffer.from(keyString).toString("base64").slice(0, 64);
   }
@@ -89,7 +89,7 @@ class SearchCache {
       }
     }
 
-    keysToDelete.forEach(key => this.cache.delete(key));
+    keysToDelete.forEach((key) => this.cache.delete(key));
 
     console.log(`Cache cleanup: removed ${keysToDelete.length} expired items`);
   }
@@ -125,11 +125,11 @@ export const searchRateLimit = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: req => {
+  skip: (req) => {
     // Skip rate limiting for admins
     return req.user?.role === "admin";
   },
-  keyGenerator: req => {
+  keyGenerator: (req) => {
     // Use user ID if available, otherwise IP
     return req.user?._id?.toString() || req.ip;
   },

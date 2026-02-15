@@ -82,11 +82,11 @@ export class SecurityValidator {
 }
 
 export const secureValidationSchemas = {
-  username: z.string().refine(val => {
+  username: z.string().refine((val) => {
     const validation = SecurityValidator.validateUsername(val);
     return validation.isValid;
   }),
-  password: z.string().refine(val => {
+  password: z.string().refine((val) => {
     const validation = SecurityValidator.validatePassword(val);
     return validation.isValid;
   }),

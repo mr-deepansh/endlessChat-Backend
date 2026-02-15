@@ -163,7 +163,7 @@ class SecurityService {
     }
 
     // Geographic risk recommendations
-    if (analytics.geographicRisk?.some(country => country.riskLevel === "high")) {
+    if (analytics.geographicRisk?.some((country) => country.riskLevel === "high")) {
       recommendations.push({
         type: "geographic",
         priority: "high",

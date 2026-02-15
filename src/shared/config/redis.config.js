@@ -58,7 +58,7 @@ const createRedisConfig = (options = {}) => {
     lazyConnect: true, // Better for production - connect when needed
 
     // Retry strategy with exponential backoff
-    retryStrategy: times => {
+    retryStrategy: (times) => {
       const maxRetries = isProduction ? 5 : 10;
       if (times > maxRetries) {
         logger.error(`Redis connection failed after ${maxRetries} retries`, {
@@ -92,9 +92,9 @@ const createRedisConfig = (options = {}) => {
         : undefined,
 
     // Reconnection strategy
-    reconnectOnError: err => {
+    reconnectOnError: (err) => {
       const targetErrors = ["READONLY", "ECONNRESET", "ETIMEDOUT", "ENOTFOUND"];
-      const shouldReconnect = targetErrors.some(error => err.message.toUpperCase().includes(error));
+      const shouldReconnect = targetErrors.some((error) => err.message.toUpperCase().includes(error));
 
       if (shouldReconnect) {
         logger.warn(`Redis reconnecting due to error: ${err.message}`, {
@@ -150,7 +150,7 @@ export const createRedisClient = (options = {}) => {
   }
 
   // Enhanced event handling with structured logging
-  client.on("error", err => {
+  client.on("error", (err) => {
     logger.error(`Redis error (${clientId})`, {
       error: err.message,
       code: err.code,
@@ -172,7 +172,7 @@ export const createRedisClient = (options = {}) => {
     });
   });
 
-  client.on("reconnecting", ms => {
+  client.on("reconnecting", (ms) => {
     logger.warn(`Redis reconnecting (${clientId})`, {
       delay: `${ms}ms`,
       attempt: "retry",
@@ -343,7 +343,7 @@ export const getRedisHealth = async () => {
 };
 
 // Graceful shutdown handler
-const gracefulShutdown = async signal => {
+const gracefulShutdown = async (signal) => {
   logger.info(`Received ${signal}, shutting down Redis clients...`);
   await clientManager.gracefulShutdown();
   process.exit(0);
@@ -354,7 +354,7 @@ process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 // Handle uncaught exceptions
-process.on("uncaughtException", async error => {
+process.on("uncaughtException", async (error) => {
   logger.error("Uncaught Exception, shutting down Redis clients", error);
   await clientManager.gracefulShutdown();
   process.exit(1);

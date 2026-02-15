@@ -33,7 +33,7 @@ export const createSecureRedisClient = (client, clientName = "default") => {
   }
 
   // Wrap dangerous commands
-  DANGEROUS_COMMANDS.forEach(cmd => {
+  DANGEROUS_COMMANDS.forEach((cmd) => {
     const originalMethod = client[cmd.toLowerCase()];
 
     if (typeof originalMethod === "function") {
@@ -49,7 +49,7 @@ export const createSecureRedisClient = (client, clientName = "default") => {
   });
 
   // Add command monitoring
-  client.on("command", command => {
+  client.on("command", (command) => {
     if (DANGEROUS_COMMANDS.includes(command.name?.toUpperCase())) {
       logger.warn(`Attempted dangerous Redis command: ${command.name}`, {
         client: clientName,

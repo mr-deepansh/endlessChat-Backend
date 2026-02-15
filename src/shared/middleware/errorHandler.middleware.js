@@ -44,7 +44,7 @@ export const errorHandler = (err, req, res, next) => {
 
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors)
-      .map(val => val.message)
+      .map((val) => val.message)
       .join(", ");
     error = new ApiError(HTTP_STATUS.BAD_REQUEST, message);
   }
@@ -93,7 +93,7 @@ export const notFoundHandler = (req, res, next) => {
 /**
  * Async error wrapper
  */
-export const asyncErrorHandler = fn => {
+export const asyncErrorHandler = (fn) => {
   return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

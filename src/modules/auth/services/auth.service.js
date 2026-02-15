@@ -29,8 +29,8 @@ class AuthService {
       .select("email username")
       .lean();
     // Check conflicts
-    const emailExists = existingUsers.find(u => u.email === email.toLowerCase());
-    const usernameExists = existingUsers.find(u => u.username === username.toLowerCase());
+    const emailExists = existingUsers.find((u) => u.email === email.toLowerCase());
+    const usernameExists = existingUsers.find((u) => u.username === username.toLowerCase());
     if (emailExists || usernameExists) {
       const conflicts = [];
       if (emailExists) {
@@ -139,7 +139,7 @@ class AuthService {
       try {
         const userAgent = req.get ? req.get("User-Agent") : req.headers?.["user-agent"] || "Unknown";
         const ip = req.ip || req.connection?.remoteAddress || "Unknown";
-        const getDeviceInfo = ua => {
+        const getDeviceInfo = (ua) => {
           const sanitizedUA = String(ua || "").replace(/[<>"'&]/g, "");
           const os = sanitizedUA.includes("Windows")
             ? "Windows"
@@ -298,7 +298,7 @@ class AuthService {
     ).lean();
     if (!user) {
       // Consistent timing to prevent user enumeration
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       return { message: "If the email exists, a password reset link has been sent" };
     }
     // Allow multiple reset requests but with reasonable cooldown (2 minutes)
@@ -510,7 +510,7 @@ class AuthService {
       try {
         const userAgent = req.get ? req.get("User-Agent") : req.headers?.["user-agent"] || "Unknown";
         const ip = req.ip || req.connection?.remoteAddress || "Unknown";
-        const getDeviceInfo = ua => {
+        const getDeviceInfo = (ua) => {
           const sanitizedUA = String(ua || "").replace(/[<>"'&]/g, "");
           const os = sanitizedUA.includes("Windows")
             ? "Windows"
@@ -635,7 +635,7 @@ class AuthService {
     try {
       const userAgent = req.get ? req.get("User-Agent") : req.headers?.["user-agent"] || "Unknown";
       const ip = req.ip || req.connection?.remoteAddress || "Unknown";
-      const getDeviceInfo = ua => {
+      const getDeviceInfo = (ua) => {
         const sanitizedUA = String(ua || "").replace(/[<>"'&]/g, "");
         const os = sanitizedUA.includes("Windows")
           ? "Windows"
@@ -742,12 +742,12 @@ class AuthService {
       // Process activity log efficiently
       const recentLogins =
         user.activityLog
-          ?.filter(log => log.action === "login")
+          ?.filter((log) => log.action === "login")
           ?.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
           ?.slice(0, 5) || [];
       const lastSuccessfulLogin =
         user.activityLog
-          ?.filter(log => log.action === "login" && log.success)
+          ?.filter((log) => log.action === "login" && log.success)
           ?.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0] || null;
       return {
         accountSecurity: {
@@ -762,7 +762,7 @@ class AuthService {
           lastLogin: lastSuccessfulLogin,
           lastActive: user.lastActive || null,
           recentLogins,
-          totalLoginAttempts: user.activityLog?.filter(log => log.action === "login")?.length || 0,
+          totalLoginAttempts: user.activityLog?.filter((log) => log.action === "login")?.length || 0,
         },
         deviceInfo: {
           lastLoginIP: user.security?.lastLoginIP || null,

@@ -33,7 +33,7 @@ const pollSchema = new Schema(
     options: {
       type: [pollOptionSchema],
       validate: {
-        validator: v => v.length >= 2 && v.length <= 10,
+        validator: (v) => v.length >= 2 && v.length <= 10,
         message: "Poll must have 2-10 options",
       },
     },
@@ -254,7 +254,7 @@ postSchema.pre("save", async function (next) {
     this.excerpt = `${this.content.substring(0, 297)}...`;
   }
   if (this.isModified("content")) {
-    this.hashtags = (this.content.match(/#\w+/g) || []).map(t => t.toLowerCase().substring(1));
+    this.hashtags = (this.content.match(/#\w+/g) || []).map((t) => t.toLowerCase().substring(1));
   }
   if (this.status === "published" && !this.publishedAt) {
     this.publishedAt = new Date();

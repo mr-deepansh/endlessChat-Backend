@@ -136,7 +136,7 @@ export class PostService {
       // Whitelist fields that can be updated
       const allowedUpdates = ["title", "content", "tags", "status", "visibility", "scheduledAt", "metadata"];
       const filteredUpdateData = Object.keys(updateData)
-        .filter(key => allowedUpdates.includes(key))
+        .filter((key) => allowedUpdates.includes(key))
         .reduce((obj, key) => {
           obj[key] = updateData[key];
           return obj;
@@ -179,9 +179,9 @@ export class PostService {
       // Clean up Cloudinary images before deleting post
       if (post.images && post.images.length > 0) {
         const deletePromises = post.images
-          .map(image => {
+          .map((image) => {
             if (image.publicId) {
-              return deleteFromCloudinary(image.publicId).catch(err =>
+              return deleteFromCloudinary(image.publicId).catch((err) =>
                 logger.warn("Failed to delete image from Cloudinary", { publicId: image.publicId, error: err.message }),
               );
             }
@@ -246,9 +246,9 @@ export class PostService {
       if (post.images && post.images.length > 0) {
         try {
           const deletePromises = post.images
-            .map(image => {
+            .map((image) => {
               if (image.publicId) {
-                return deleteFromCloudinary(image.publicId).catch(err =>
+                return deleteFromCloudinary(image.publicId).catch((err) =>
                   logger.warn("Failed to delete image from Cloudinary", {
                     publicId: image.publicId,
                     error: err.message,
@@ -303,10 +303,10 @@ export class PostService {
     };
     // Whitelist and apply filters to prevent NoSQL injection
     const allowedFilters = ["tags", "author", "type"];
-    Object.keys(filters).forEach(key => {
+    Object.keys(filters).forEach((key) => {
       if (allowedFilters.includes(key) && filters[key]) {
         if (key === "tags") {
-          query.tags = { $in: filters[key].split(",").map(tag => tag.trim()) };
+          query.tags = { $in: filters[key].split(",").map((tag) => tag.trim()) };
         } else {
           query[key] = filters[key];
         }
@@ -373,7 +373,7 @@ export class PostService {
         lastName: user.lastName,
         avatar: user.avatar || "/assets/default-avatar.png",
       },
-      posts: posts.map(post => ({
+      posts: posts.map((post) => ({
         id: post._id,
         title: post.title,
         content:

@@ -49,7 +49,7 @@ function setupHusky() {
     // 4. Verify setup
     console.log("\n✅ Husky setup completed successfully!");
     console.log("\n📋 Configured hooks:");
-    Object.keys(HOOKS).forEach(hook => {
+    Object.keys(HOOKS).forEach((hook) => {
       const hookPath = join(".husky", hook);
       const exists = existsSync(hookPath);
       console.log(`   ${exists ? "✅" : "❌"} ${hook}`);

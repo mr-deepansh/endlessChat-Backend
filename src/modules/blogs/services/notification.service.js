@@ -66,7 +66,7 @@ class NotificationService {
     };
 
     const relevantMilestones = milestones[engagementType] || [];
-    const achievedMilestone = relevantMilestones.find(milestone => newCount >= milestone && newCount - 1 < milestone);
+    const achievedMilestone = relevantMilestones.find((milestone) => newCount >= milestone && newCount - 1 < milestone);
 
     if (achievedMilestone) {
       await this.notifyMilestone(postId, engagementType, achievedMilestone);

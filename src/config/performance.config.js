@@ -70,7 +70,7 @@ export const performanceConfig = {
     legacyHeaders: false,
     skipSuccessfulRequests: false,
     skipFailedRequests: false,
-    keyGenerator: req => req.ip,
+    keyGenerator: (req) => req.ip,
     handler: (req, res) => {
       res.status(429).json({
         error: "Too many requests",

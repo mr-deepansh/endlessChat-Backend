@@ -8,7 +8,7 @@ import { ApiError } from "../utils/ApiError.js";
 export const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map(error => ({
+    const errorMessages = errors.array().map((error) => ({
       field: error.path,
       message: error.msg,
       value: error.value,
@@ -25,7 +25,7 @@ export const handleValidationErrors = (req, res, next) => {
 export const validateRequest = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map(error => ({
+    const errorMessages = errors.array().map((error) => ({
       field: error.path,
       message: error.msg,
       value: error.value,

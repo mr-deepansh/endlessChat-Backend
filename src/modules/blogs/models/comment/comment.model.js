@@ -86,13 +86,13 @@ commentSchema.pre("save", function (next) {
   // Extract hashtags
   if (this.isModified("content")) {
     this.hashtags = this.content.match(/#\w+/g) || [];
-    this.hashtags = this.hashtags.map(tag => tag.toLowerCase());
+    this.hashtags = this.hashtags.map((tag) => tag.toLowerCase());
   }
 
   // Set depth for nested comments
   if (this.parentComment && this.isNew) {
     Comment.findById(this.parentComment)
-      .then(parent => {
+      .then((parent) => {
         if (parent) {
           this.depth = (parent.depth || 0) + 1;
         }
@@ -105,7 +105,7 @@ commentSchema.pre("save", function (next) {
 });
 
 // Post-save middleware to update reply count
-commentSchema.post("save", async doc => {
+commentSchema.post("save", async (doc) => {
   if (doc.parentComment) {
     await Comment.findByIdAndUpdate(doc.parentComment, {
       $inc: { replyCount: 1 },

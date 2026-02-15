@@ -27,7 +27,7 @@ const notificationIdValidation = [
   param("notificationId")
     .isLength({ min: 1 })
     .withMessage("Notification ID is required")
-    .custom(value => {
+    .custom((value) => {
       if (value.length === 24 && /^[0-9a-fA-F]{24}$/.test(value)) {
         return true;
       }

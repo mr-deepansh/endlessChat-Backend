@@ -43,7 +43,7 @@ export const parseArray = (str, defaultValue = []) => {
   }
   return str
     .split(",")
-    .map(item => item.trim())
+    .map((item) => item.trim())
     .filter(Boolean);
 };
 
@@ -204,7 +204,7 @@ export const securityConfig = {
 // ==========================
 export const validateConfig = () => {
   const required = ["MONGODB_URI", "JWT_SECRET"];
-  const missing = required.filter(key => !process.env[key]);
+  const missing = required.filter((key) => !process.env[key]);
   if (missing.length > 0) {
     logger.error(`Missing required environment variables: ${missing.join(", ")}`);
     throw new Error(`Missing required environment variables: ${missing.join(", ")}`);

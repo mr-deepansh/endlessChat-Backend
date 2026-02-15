@@ -253,10 +253,13 @@ class DashboardProcessor {
       },
       breakdown: {
         usersByRole: Object.fromEntries(
-          roleDistribution.map(item => [item._id || "undefined", { total: item.count, active: item.activeCount || 0 }]),
+          roleDistribution.map((item) => [
+            item._id || "undefined",
+            { total: item.count, active: item.activeCount || 0 },
+          ]),
         ),
         monthlyGrowth: this.formatMonthlyGrowth(monthlyGrowth),
-        activityDistribution: Object.fromEntries(activityPatterns.map(item => [item._id, item.count])),
+        activityDistribution: Object.fromEntries(activityPatterns.map((item) => [item._id, item.count])),
       },
       activity: {
         recentUsers: this.formatRecentUsers(recentUsers),
@@ -265,7 +268,7 @@ class DashboardProcessor {
   }
   static formatMonthlyGrowth(monthlyGrowth) {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return monthlyGrowth.map(item => ({
+    return monthlyGrowth.map((item) => ({
       year: item._id.year,
       month: item._id.month,
       monthName: monthNames[item._id.month - 1],
@@ -275,7 +278,7 @@ class DashboardProcessor {
     }));
   }
   static formatRecentUsers(recentUsers) {
-    return recentUsers.map(user => ({
+    return recentUsers.map((user) => ({
       id: user._id,
       username: user.username,
       email: user.email,

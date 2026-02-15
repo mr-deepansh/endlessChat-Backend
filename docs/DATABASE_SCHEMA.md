@@ -1311,7 +1311,7 @@ blogSchema.pre("save", function (next) {
 
 ```javascript
 // Efficient user lookup with selected fields
-const findUserById = id => {
+const findUserById = (id) => {
   return User.findById(id).select("username email profile.firstName profile.lastName profile.avatar").lean(); // Returns plain JavaScript object for better performance
 };
 
@@ -1343,7 +1343,7 @@ const getCommentThread = (blogId, parentId = null) => {
 
 ```javascript
 // Blog analytics aggregation
-const getBlogAnalytics = authorId => {
+const getBlogAnalytics = (authorId) => {
   return Blog.aggregate([
     { $match: { author: ObjectId(authorId) } },
     {
@@ -1360,7 +1360,7 @@ const getBlogAnalytics = authorId => {
 };
 
 // User engagement metrics
-const getUserEngagementMetrics = userId => {
+const getUserEngagementMetrics = (userId) => {
   return User.aggregate([
     { $match: { _id: ObjectId(userId) } },
     {
@@ -1400,7 +1400,7 @@ const getUserEngagementMetrics = userId => {
 
 ```javascript
 // migrations/001_create_indexes.js
-export const up = async db => {
+export const up = async (db) => {
   // Create essential indexes
   await db.collection("users").createIndex({ email: 1 }, { unique: true });
   await db.collection("users").createIndex({ username: 1 }, { unique: true });
@@ -1410,7 +1410,7 @@ export const up = async db => {
   console.log("✅ Indexes created successfully");
 };
 
-export const down = async db => {
+export const down = async (db) => {
   // Drop indexes if needed
   await db.collection("users").dropIndex({ email: 1 });
   await db.collection("users").dropIndex({ username: 1 });
@@ -1421,7 +1421,7 @@ export const down = async db => {
 };
 
 // migrations/002_add_analytics_fields.js
-export const up = async db => {
+export const up = async (db) => {
   // Add analytics fields to existing blogs
   await db.collection("blogs").updateMany(
     { analytics: { $exists: false } },
@@ -1445,7 +1445,7 @@ export const up = async db => {
 };
 
 // migrations/003_user_settings_migration.js
-export const up = async db => {
+export const up = async (db) => {
   // Add default settings to existing users
   await db.collection("users").updateMany(
     { settings: { $exists: false } },

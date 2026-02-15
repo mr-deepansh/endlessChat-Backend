@@ -35,7 +35,7 @@ const handleControllerError = (error, req, res, startTime, logger) => {
   throw new ApiError(500, `Operation failed: ${error.message}`);
 };
 
-const clearUserCaches = async userId => {
+const clearUserCaches = async (userId) => {
   await safeAsyncOperation(
     async () => {
       if (typeof cache !== "undefined" && cache.del) {

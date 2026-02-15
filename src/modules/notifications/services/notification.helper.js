@@ -230,7 +230,7 @@ export class NotificationHelper {
    * Batch create notifications (for performance)
    */
   static async createBatchNotifications(notifications) {
-    const promises = notifications.map(notification => notificationService.createNotification(notification));
+    const promises = notifications.map((notification) => notificationService.createNotification(notification));
 
     return await Promise.allSettled(promises);
   }

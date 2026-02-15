@@ -137,7 +137,7 @@ export class MonitoringService {
       const collections = await mongoose.connection.db.listCollections().toArray();
       const stats = await mongoose.connection.db.stats();
       const collectionStats = await Promise.all(
-        collections.map(async collection => {
+        collections.map(async (collection) => {
           try {
             const coll = mongoose.connection.db.collection(collection.name);
             const count = await coll.countDocuments();
@@ -259,7 +259,7 @@ export class MonitoringService {
    */
   validateConfigSettings(category, settings) {
     const validators = {
-      security: settings => {
+      security: (settings) => {
         if (settings.maxLoginAttempts && (settings.maxLoginAttempts < 1 || settings.maxLoginAttempts > 10)) {
           throw new Error("maxLoginAttempts must be between 1 and 10");
         }
@@ -267,7 +267,7 @@ export class MonitoringService {
           throw new Error("lockoutDuration must be at least 60 seconds");
         }
       },
-      performance: settings => {
+      performance: (settings) => {
         if (settings.rateLimitMax && settings.rateLimitMax < 1) {
           throw new Error("rateLimitMax must be positive");
         }
@@ -275,7 +275,7 @@ export class MonitoringService {
           throw new Error("cacheTTL must be non-negative");
         }
       },
-      monitoring: settings => {
+      monitoring: (settings) => {
         if (settings.healthCheckInterval && settings.healthCheckInterval < 5000) {
           throw new Error("healthCheckInterval must be at least 5000ms");
         }

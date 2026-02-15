@@ -24,7 +24,7 @@ class RedisManager {
       lazyConnect: false,
       family: 4,
       keepAlive: true,
-      retryStrategy: times => (times > 5 ? null : Math.min(times * 50, 1000)),
+      retryStrategy: (times) => (times > 5 ? null : Math.min(times * 50, 1000)),
     };
 
     this.client = new Redis(config);
@@ -41,7 +41,7 @@ class RedisManager {
       this.isConnected = true;
     });
 
-    this.client.on("error", err => {
+    this.client.on("error", (err) => {
       console.error("Redis error:", err.message);
       this.isConnected = false;
     });

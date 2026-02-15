@@ -6,7 +6,7 @@ import fs from "fs/promises";
 import path from "path";
 
 // Sanitize file path to prevent path traversal
-const sanitizeFilePath = filePath => {
+const sanitizeFilePath = (filePath) => {
   if (!filePath || typeof filePath !== "string") {
     throw new ApiError(400, "Invalid file path");
   }
@@ -22,7 +22,7 @@ const sanitizeFilePath = filePath => {
 };
 
 // Validate public ID for Cloudinary
-const validatePublicId = publicId => {
+const validatePublicId = (publicId) => {
   if (!publicId || typeof publicId !== "string") {
     throw new ApiError(400, "Invalid public ID");
   }
@@ -71,7 +71,7 @@ export const uploadMultipleMedia = asyncHandler(async (req, res) => {
 
   try {
     const { folder = "media" } = req.body;
-    const uploadPromises = req.files.map(file => {
+    const uploadPromises = req.files.map((file) => {
       const sanitizedPath = sanitizeFilePath(file.path);
       return uploadToCloudinary(sanitizedPath, folder);
     });
@@ -80,7 +80,7 @@ export const uploadMultipleMedia = asyncHandler(async (req, res) => {
 
     // Delete temp files
     await Promise.all(
-      req.files.map(file => {
+      req.files.map((file) => {
         const sanitizedPath = sanitizeFilePath(file.path);
         return fs.unlink(sanitizedPath).catch(() => {});
       }),
@@ -90,7 +90,7 @@ export const uploadMultipleMedia = asyncHandler(async (req, res) => {
   } catch (error) {
     // Delete temp files on error
     await Promise.all(
-      req.files.map(file => {
+      req.files.map((file) => {
         const sanitizedPath = sanitizeFilePath(file.path);
         return fs.unlink(sanitizedPath).catch(() => {});
       }),

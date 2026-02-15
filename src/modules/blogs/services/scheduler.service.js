@@ -236,7 +236,7 @@ class SchedulerService {
         drafts,
         total: scheduled + published + drafts,
       },
-      bestTimes: bestTimes.map(time => ({
+      bestTimes: bestTimes.map((time) => ({
         hour: time._id.hour,
         dayOfWeek: time._id.dayOfWeek,
         avgEngagement: Math.round(time.avgEngagement),

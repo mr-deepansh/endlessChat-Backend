@@ -20,7 +20,7 @@ class Logger {
 
     if (!Logger._cleanupHookRegistered) {
       process.on("exit", () => {
-        Object.values(this.streams).forEach(s => s.end && s.end());
+        Object.values(this.streams).forEach((s) => s.end && s.end());
       });
       Logger._cleanupHookRegistered = true;
     }
@@ -39,7 +39,7 @@ class Logger {
       const compressAge = this.compressAfterDays * 24 * 60 * 60 * 1000;
       const deleteAge = this.retentionDays * 24 * 60 * 60 * 1000;
 
-      files.forEach(file => {
+      files.forEach((file) => {
         const filePath = path.join(this.logDir, file);
         const stats = fs.statSync(filePath);
 

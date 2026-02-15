@@ -79,19 +79,19 @@ export const auditSchema = new Schema(
 export const validators = {
   // Email validation
   email: {
-    validator: email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+    validator: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
     message: "Invalid email format",
   },
 
   // URL validation
   url: {
-    validator: url => /^https?:\/\/.+/.test(url),
+    validator: (url) => /^https?:\/\/.+/.test(url),
     message: "Invalid URL format",
   },
 
   // MongoDB ObjectId validation
   objectId: {
-    validator: id => mongoose.Types.ObjectId.isValid(id),
+    validator: (id) => mongoose.Types.ObjectId.isValid(id),
     message: "Invalid ObjectId format",
   },
 };

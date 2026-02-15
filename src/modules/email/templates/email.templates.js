@@ -16,11 +16,11 @@ export const renderEmailTemplate = async (templateName, data) => {
   }
 };
 
-export const generateForgotPasswordEmail = async data => {
+export const generateForgotPasswordEmail = async (data) => {
   return await renderEmailTemplate("forgot-password", data);
 };
 
-export const generatePasswordResetSuccessEmail = async data => {
+export const generatePasswordResetSuccessEmail = async (data) => {
   return await renderEmailTemplate("password-reset-success", data);
 };
 

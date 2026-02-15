@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 const BlockedIP = {
   find: () => ({ lean: () => [], limit: () => ({ skip: () => [] }) }),
   countDocuments: () => 0,
-  create: data => ({
+  create: (data) => ({
     ...data,
     _id: new mongoose.Types.ObjectId(),
     createdAt: new Date(),
@@ -200,9 +200,9 @@ export class SecurityService {
         },
         summary: {
           totalSuspicious: safeTotal,
-          highRisk: safeAccounts.filter(a => a?.riskLevel === "high").length,
-          mediumRisk: safeAccounts.filter(a => a?.riskLevel === "medium").length,
-          lowRisk: safeAccounts.filter(a => a?.riskLevel === "low").length,
+          highRisk: safeAccounts.filter((a) => a?.riskLevel === "high").length,
+          mediumRisk: safeAccounts.filter((a) => a?.riskLevel === "medium").length,
+          lowRisk: safeAccounts.filter((a) => a?.riskLevel === "low").length,
         },
       };
     } catch (error) {
@@ -266,7 +266,7 @@ export class SecurityService {
     const filteredAttempts =
       status === "all"
         ? mockAttempts
-        : mockAttempts.filter(attempt =>
+        : mockAttempts.filter((attempt) =>
             status === "success" ? attempt.status === "success" : attempt.status === "failed",
           );
 
@@ -280,8 +280,8 @@ export class SecurityService {
       },
       summary: {
         total: filteredAttempts.length,
-        successful: filteredAttempts.filter(a => a.status === "success").length,
-        failed: filteredAttempts.filter(a => a.status === "failed").length,
+        successful: filteredAttempts.filter((a) => a.status === "success").length,
+        failed: filteredAttempts.filter((a) => a.status === "failed").length,
         timeRange,
       },
     };
@@ -353,8 +353,8 @@ export class SecurityService {
       },
       summary: {
         total: mockBlockedIPs.length,
-        active: mockBlockedIPs.filter(ip => ip.isActive).length,
-        expired: mockBlockedIPs.filter(ip => !ip.isActive).length,
+        active: mockBlockedIPs.filter((ip) => ip.isActive).length,
+        expired: mockBlockedIPs.filter((ip) => !ip.isActive).length,
       },
     };
   }

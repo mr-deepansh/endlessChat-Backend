@@ -84,7 +84,7 @@ export class NotificationService {
       ]);
 
       // Transform notifications to match frontend expectations
-      const transformedNotifications = notifications.map(notification => ({
+      const transformedNotifications = notifications.map((notification) => ({
         ...notification,
         from: notification.sender || {
           _id: "system",
@@ -244,7 +244,7 @@ export class NotificationService {
    */
   async createSystemNotification(recipients, title, message, data = {}) {
     try {
-      const notifications = recipients.map(recipientId => ({
+      const notifications = recipients.map((recipientId) => ({
         recipient: recipientId,
         type: "system",
         title,
@@ -298,7 +298,7 @@ export class NotificationService {
           acc[item._id] = item.count;
           return acc;
         }, {}),
-        recentActivity: recentActivity.map(n => ({
+        recentActivity: recentActivity.map((n) => ({
           type: n.type,
           timestamp: n.createdAt,
         })),
@@ -385,8 +385,8 @@ export class NotificationService {
     try {
       const result = await Notification.insertMany(notifications);
       // Invalidate cache for all affected users
-      const userIds = [...new Set(notifications.map(n => n.recipient))];
-      await Promise.all(userIds.map(userId => this.invalidateUserCache(userId)));
+      const userIds = [...new Set(notifications.map((n) => n.recipient))];
+      await Promise.all(userIds.map((userId) => this.invalidateUserCache(userId)));
       return { created: result.length };
     } catch (error) {
       throw new ApiError(500, "Failed to create batch notifications", error);

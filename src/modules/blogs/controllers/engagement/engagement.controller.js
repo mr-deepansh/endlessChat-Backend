@@ -278,14 +278,14 @@ const getBookmarkedPosts = asyncHandler(async (req, res) => {
       .skip(skip)
       .limit(parseInt(limit))
       .select("post");
-    const postIds = bookmarks.map(b => b.post);
+    const postIds = bookmarks.map((b) => b.post);
     // Get posts with engagement data
     const posts = await Post.find({ _id: { $in: postIds } })
       .populate("author", "username firstName lastName avatar")
       .sort({ createdAt: -1 });
     // Add engagement status for each post
     const postsWithEngagement = await Promise.all(
-      posts.map(async post => {
+      posts.map(async (post) => {
         const [isLiked, isBookmarked] = await Promise.all([
           Like.exists({ user: userId, target: post._id, targetType: "post" }),
           Bookmark.exists({ user: userId, post: post._id }),

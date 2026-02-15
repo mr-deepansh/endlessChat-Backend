@@ -69,7 +69,7 @@ export const connectDB = async (retryCount = 0) => {
     });
 
     if (retryCount < MAX_RECONNECT_ATTEMPTS && !isShuttingDown) {
-      await new Promise(resolve => setTimeout(resolve, RECONNECT_DELAY * (retryCount + 1)));
+      await new Promise((resolve) => setTimeout(resolve, RECONNECT_DELAY * (retryCount + 1)));
       return connectDB(retryCount + 1);
     }
 
@@ -88,7 +88,7 @@ export const disconnectDB = async (force = false) => {
 
 // Graceful shutdown only once
 if (!global.__MONGO_SHUTDOWN_HANDLER__) {
-  const gracefulShutdown = async signal => {
+  const gracefulShutdown = async (signal) => {
     if (isShuttingDown) {
       return;
     }

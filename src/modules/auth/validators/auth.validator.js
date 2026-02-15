@@ -20,7 +20,7 @@ export const verifyEmailSchema = z.object({
 /**
  * Validation middleware factory
  */
-export const validateAuth = schema => {
+export const validateAuth = (schema) => {
   return (req, res, next) => {
     try {
       const validatedData = schema.parse(req.body);
@@ -28,7 +28,7 @@ export const validateAuth = schema => {
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errors = error.errors.map(err => ({
+        const errors = error.errors.map((err) => ({
           field: err.path.join("."),
           message: err.message,
         }));
@@ -51,7 +51,7 @@ export const validateAuth = schema => {
 /**
  * Parameter validation for routes with params
  */
-export const validateParams = schema => {
+export const validateParams = (schema) => {
   return (req, res, next) => {
     try {
       const validatedData = schema.parse(req.params);
@@ -59,7 +59,7 @@ export const validateParams = schema => {
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errors = error.errors.map(err => ({
+        const errors = error.errors.map((err) => ({
           field: err.path.join("."),
           message: err.message,
         }));

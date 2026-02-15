@@ -1,5 +1,5 @@
 // src/shared/utils/ApiHealth.js
-export const calculateApiHealth = executionTime => {
+export const calculateApiHealth = (executionTime) => {
   if (executionTime < 100) {
     return "excellent";
   }

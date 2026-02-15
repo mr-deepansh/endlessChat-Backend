@@ -51,7 +51,7 @@ export class SystemService {
           },
           cpu: {
             usage: Math.round((cpuUsage.user + cpuUsage.system) / 1000000), // Convert to ms
-            loadAverage: loadAverage.map(load => Math.round(load * 100) / 100),
+            loadAverage: loadAverage.map((load) => Math.round(load * 100) / 100),
             cores: os.cpus().length,
           },
         },

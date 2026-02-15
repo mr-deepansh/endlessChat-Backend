@@ -25,7 +25,7 @@ export const isSuperAdmin = asyncHandler(async (req, res, next) => {
  * Middleware for role-based access control with hierarchy
  * @param {string} minimumRole - Minimum role required
  */
-export const requireRole = minimumRole => {
+export const requireRole = (minimumRole) => {
   return asyncHandler(async (req, res, next) => {
     if (!req.user?.role) {
       throw new ApiError(401, "Authentication required");

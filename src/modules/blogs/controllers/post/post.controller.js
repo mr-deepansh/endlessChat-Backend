@@ -35,7 +35,7 @@ const createPost = asyncHandler(async (req, res) => {
   const files = req.files || (req.file ? [req.file] : []);
 
   if (files.length > 0) {
-    const uploadPromises = files.map(async file => {
+    const uploadPromises = files.map(async (file) => {
       try {
         const result = await uploadToCloudinary(file.path, "posts");
         await fs.unlink(file.path).catch(() => {});
@@ -49,7 +49,7 @@ const createPost = asyncHandler(async (req, res) => {
 
     const uploadResults = await Promise.all(uploadPromises);
 
-    uploadResults.forEach(upload => {
+    uploadResults.forEach((upload) => {
       if (upload) {
         if (upload.mimetype.startsWith("image/")) {
           postData.images.push(upload.result);
@@ -83,7 +83,7 @@ const getPosts = asyncHandler(async (req, res) => {
   const result = await PostService.getPosts(filters, parseInt(page), parseInt(limit));
   // Ensure all posts have engagement data
   if (result.posts) {
-    result.posts = result.posts.map(post => {
+    result.posts = result.posts.map((post) => {
       const postData = post.toObject ? post.toObject() : post;
       if (!postData.engagement) {
         postData.engagement = {
@@ -265,7 +265,7 @@ const getMyPosts = asyncHandler(async (req, res) => {
   const { page = 1, limit = 12, status, type } = req.query;
   const result = await PostService.getMyPosts(userId, parseInt(page), parseInt(limit), status);
   // Clean response - remove sensitive data
-  const cleanPosts = result.posts.map(post => ({
+  const cleanPosts = result.posts.map((post) => ({
     id: post._id,
     title: post.title,
     content: post.content && post.content.length > 150 ? `${post.content.substring(0, 150)}...` : post.content || "",
@@ -307,8 +307,8 @@ const getMyPosts = asyncHandler(async (req, res) => {
         pagination: result.pagination,
         stats: {
           total: result.pagination.total,
-          drafts: cleanPosts.filter(p => p.status === "draft").length,
-          published: cleanPosts.filter(p => p.status === "published").length,
+          drafts: cleanPosts.filter((p) => p.status === "draft").length,
+          published: cleanPosts.filter((p) => p.status === "published").length,
         },
       },
       "Posts retrieved successfully",

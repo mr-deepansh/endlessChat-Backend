@@ -36,7 +36,7 @@ const getSystemInfo = () => {
 // ==============================================
 // Kill Port in Development to avoid conflicts
 // ==============================================
-const killPort = async port => {
+const killPort = async (port) => {
   try {
     // Find processes using the port
     const output = execSync(`netstat -ano | findstr :${port}`, { encoding: "utf8" });
@@ -62,7 +62,7 @@ const killPort = async port => {
     }
     if (pids.size > 0) {
       // Wait for processes to fully terminate
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
   } catch (err) {
     // Port is free or error occurred - this is fine
@@ -123,7 +123,7 @@ const startServer = async () => {
     const startServerWithRetry = async (retries = 3) => {
       try {
         await new Promise((resolve, reject) => {
-          const onError = err => {
+          const onError = (err) => {
             server.removeListener("error", onError);
             reject(err);
           };
@@ -187,7 +187,7 @@ const startServer = async () => {
           if (serverConfig.nodeEnv === "development" && retries > 0) {
             console.log(`🔄 Port ${port} in use, retrying... (${retries} left)`);
             await killPort(port);
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             return startServerWithRetry(retries - 1);
           } else if (serverConfig.nodeEnv === "production") {
             logger.error("Port already in use in production", {
@@ -206,7 +206,7 @@ const startServer = async () => {
     // =====================================
     // Graceful Shutdown Function
     // =====================================
-    const gracefulShutdown = async signal => {
+    const gracefulShutdown = async (signal) => {
       logger.info("Initiating graceful shutdown", { signal, pid: process.pid });
       const shutdownTimeout = setTimeout(() => {
         logger.error("Forced shutdown due to timeout");
@@ -245,7 +245,7 @@ const startServer = async () => {
     process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
     process.on("SIGINT", () => gracefulShutdown("SIGINT"));
     // ✅ Unified error handling for both modes
-    process.on("uncaughtException", async err => {
+    process.on("uncaughtException", async (err) => {
       if (serverConfig.nodeEnv === "development") {
         console.log(`❌ Uncaught Exception: ${err.message}`);
         console.log(err.stack);

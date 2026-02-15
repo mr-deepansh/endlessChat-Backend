@@ -249,7 +249,7 @@ export class AuditService {
       const totalPages = Math.ceil(totalCount / limit);
 
       return {
-        logs: logs.map(log => this._formatLogEntry(log)),
+        logs: logs.map((log) => this._formatLogEntry(log)),
         pagination: {
           currentPage: page,
           totalPages,
@@ -395,9 +395,9 @@ export class AuditService {
           },
         },
         breakdown: {
-          byLevel: Object.fromEntries(result.logsByLevel.map(item => [item._id, item.count])),
-          byAction: Object.fromEntries(result.logsByAction.map(item => [item._id, item.count])),
-          byStatus: Object.fromEntries(result.logsByStatus.map(item => [item._id, item.count])),
+          byLevel: Object.fromEntries(result.logsByLevel.map((item) => [item._id, item.count])),
+          byAction: Object.fromEntries(result.logsByAction.map((item) => [item._id, item.count])),
+          byStatus: Object.fromEntries(result.logsByStatus.map((item) => [item._id, item.count])),
         },
         performance: result.performanceStats[0] || {
           avgExecutionTime: 0,
@@ -436,7 +436,7 @@ export class AuditService {
         return [];
       }
 
-      const bulkOps = activities.map(activity => ({
+      const bulkOps = activities.map((activity) => ({
         insertOne: {
           document: {
             ...activity,
@@ -566,11 +566,11 @@ export class AuditService {
     const sensitiveFields = ["password", "token", "secret", "key", "credential"];
     const sanitized = { ...details };
 
-    const sanitizeObject = obj => {
+    const sanitizeObject = (obj) => {
       for (const key in obj) {
         if (typeof obj[key] === "object" && obj[key] !== null) {
           sanitizeObject(obj[key]);
-        } else if (sensitiveFields.some(field => key.toLowerCase().includes(field))) {
+        } else if (sensitiveFields.some((field) => key.toLowerCase().includes(field))) {
           obj[key] = "***REDACTED***";
         }
       }

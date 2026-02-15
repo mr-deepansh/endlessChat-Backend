@@ -45,7 +45,7 @@ export const uploadToCloudinary = async (filePath, folder = "posts", resourceTyp
   }
 };
 
-export const deleteFromCloudinary = async publicId => {
+export const deleteFromCloudinary = async (publicId) => {
   try {
     await cloudinary.uploader.destroy(publicId);
   } catch (error) {

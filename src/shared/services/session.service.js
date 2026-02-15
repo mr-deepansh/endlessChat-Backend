@@ -116,7 +116,7 @@ export class SessionService {
       max: 0,
       total: 0,
     };
-    const userActivity = Object.fromEntries(result?.userActivity?.map(item => [item._id, item.count]) || []);
+    const userActivity = Object.fromEntries(result?.userActivity?.map((item) => [item._id, item.count]) || []);
 
     return {
       activeSessions,

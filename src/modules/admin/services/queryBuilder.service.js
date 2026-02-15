@@ -43,19 +43,19 @@ export class QueryBuilderService {
     const projection = {};
 
     // Always exclude sensitive fields
-    defaultExclude.concat(excludeFields).forEach(field => {
+    defaultExclude.concat(excludeFields).forEach((field) => {
       projection[field] = 0;
     });
 
     // Include specific fields if provided
     if (includeFields.length > 0) {
       // Reset projection and include only specified fields
-      Object.keys(projection).forEach(key => delete projection[key]);
-      includeFields.forEach(field => {
+      Object.keys(projection).forEach((key) => delete projection[key]);
+      includeFields.forEach((field) => {
         projection[field] = 1;
       });
       // Still exclude sensitive fields
-      defaultExclude.forEach(field => {
+      defaultExclude.forEach((field) => {
         projection[field] = 0;
       });
     }

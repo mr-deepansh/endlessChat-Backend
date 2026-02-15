@@ -77,7 +77,7 @@ export const securityHeaders = helmet({
  * Input sanitization middleware
  */
 export const sanitizeInput = (req, res, next) => {
-  const sanitize = obj => {
+  const sanitize = (obj) => {
     if (typeof obj === "string") {
       return obj.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
     }
@@ -149,7 +149,7 @@ export const securityAudit = (req, res, next) => {
 
   // Log sensitive operations
   const sensitiveRoutes = ["/login", "/register", "/reset-password", "/change-password"];
-  if (sensitiveRoutes.some(route => req.originalUrl.includes(route))) {
+  if (sensitiveRoutes.some((route) => req.originalUrl.includes(route))) {
     logger.info("Security-sensitive operation", securityContext);
   }
 

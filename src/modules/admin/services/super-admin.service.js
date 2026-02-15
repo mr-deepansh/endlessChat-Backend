@@ -49,7 +49,7 @@ export class SuperAdminService {
       activeUsers: 0,
     };
 
-    stats.forEach(stat => {
+    stats.forEach((stat) => {
       result.total += stat.count;
       result.activeUsers += stat.active;
       result.byRole[stat._id] = {

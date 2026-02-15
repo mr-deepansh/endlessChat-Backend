@@ -5,7 +5,7 @@ import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
-const checkPort = async port => {
+const checkPort = async (port) => {
   try {
     // Validate and sanitize port number
     const portNum = parseInt(port, 10);
@@ -21,7 +21,7 @@ const checkPort = async port => {
   }
 };
 
-const killProcessOnPort = async port => {
+const killProcessOnPort = async (port) => {
   try {
     // Validate and sanitize port number
     const portNum = parseInt(port, 10);
@@ -69,7 +69,7 @@ const startProduction = async () => {
     if (process.env.FORCE_KILL === "true") {
       console.log("🔄 Force killing existing processes...");
       await killProcessOnPort(port);
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2s
     } else {
       console.log("❌ Port conflict detected. Options:");
       console.log("   1. Set FORCE_KILL=true to kill existing processes");

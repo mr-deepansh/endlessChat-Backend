@@ -40,7 +40,7 @@ export class UserService {
     ]);
 
     // Map isEmailVerified to isVerified for frontend compatibility
-    const mappedUsers = users.map(user => ({
+    const mappedUsers = users.map((user) => ({
       ...user,
       isVerified: user.isEmailVerified,
       isEmailVerified: undefined, // Remove the original field
@@ -137,7 +137,8 @@ export class UserService {
         throw new ApiError(404, "User not found or inactive");
       }
 
-      const isAlreadyFollowing = currentUser.following?.some(id => id.toString() === targetUserId.toString()) || false;
+      const isAlreadyFollowing =
+        currentUser.following?.some((id) => id.toString() === targetUserId.toString()) || false;
       if (isAlreadyFollowing) {
         throw new ApiError(400, "Already following this user");
       }
@@ -202,7 +203,7 @@ export class UserService {
         throw new ApiError(404, "User not found");
       }
 
-      const isFollowing = currentUser.following?.some(id => id.toString() === targetUserId.toString()) || false;
+      const isFollowing = currentUser.following?.some((id) => id.toString() === targetUserId.toString()) || false;
       if (!isFollowing) {
         throw new ApiError(400, "Not following this user");
       }
@@ -340,7 +341,7 @@ export class UserService {
     const total = totalResult;
     const totalPages = Math.ceil(total / limit);
 
-    const formattedUsers = users.map(user => ({
+    const formattedUsers = users.map((user) => ({
       ...user,
       avatar: user.avatar?.url || user.avatar || null,
       fullName: user.fullName || user.username,

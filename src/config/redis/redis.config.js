@@ -15,7 +15,7 @@ const redisConfig = {
   lazyConnect: false,
   family: 4,
   keepAlive: true,
-  retryStrategy: times => (times > 10 ? null : Math.min(times * 100, 10000)),
+  retryStrategy: (times) => (times > 10 ? null : Math.min(times * 100, 10000)),
 };
 
 let redisClient;
@@ -23,7 +23,7 @@ let redisClient;
 try {
   redisClient = new Redis(redisConfig);
 
-  redisClient.on("error", err => console.error("❌ Redis Error:", err));
+  redisClient.on("error", (err) => console.error("❌ Redis Error:", err));
   redisClient.on("end", () => console.log("🔌 Redis Disconnected"));
 } catch (error) {
   console.error("🚨 Failed to Initialize Redis:", error);

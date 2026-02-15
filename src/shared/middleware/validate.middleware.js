@@ -1,13 +1,13 @@
 // src/shared/middleware/validate.middleware.js
 import { ApiError } from "../utils/ApiError.js";
 
-export const validateRequest = schema => {
+export const validateRequest = (schema) => {
   return (req, res, next) => {
     try {
       const result = schema.safeParse(req.body);
 
       if (!result.success) {
-        const errorMessage = result.error.errors.map(error => error.message).join(", ");
+        const errorMessage = result.error.errors.map((error) => error.message).join(", ");
 
         throw new ApiError(400, errorMessage);
       }
@@ -21,13 +21,13 @@ export const validateRequest = schema => {
   };
 };
 
-export const validateQuery = schema => {
+export const validateQuery = (schema) => {
   return (req, res, next) => {
     try {
       const result = schema.safeParse(req.query);
 
       if (!result.success) {
-        const errorMessage = result.error.errors.map(error => error.message).join(", ");
+        const errorMessage = result.error.errors.map((error) => error.message).join(", ");
 
         throw new ApiError(400, errorMessage);
       }
@@ -41,13 +41,13 @@ export const validateQuery = schema => {
   };
 };
 
-export const validateParams = schema => {
+export const validateParams = (schema) => {
   return (req, res, next) => {
     try {
       const result = schema.safeParse(req.params);
 
       if (!result.success) {
-        const errorMessage = result.error.errors.map(error => error.message).join(", ");
+        const errorMessage = result.error.errors.map((error) => error.message).join(", ");
 
         throw new ApiError(400, errorMessage);
       }

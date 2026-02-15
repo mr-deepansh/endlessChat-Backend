@@ -27,7 +27,7 @@ export const globalErrorHandler = (err, req, res, next) => {
   }
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors)
-      .map(val => val.message)
+      .map((val) => val.message)
       .join(", ");
     error = new ApiError(400, message);
   }
@@ -47,7 +47,7 @@ export const globalErrorHandler = (err, req, res, next) => {
 };
 
 /** Async error wrapper */
-export const asyncHandler = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+export const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 /** 404 handler */
 export const notFound = (req, res, next) => {
@@ -56,8 +56,8 @@ export const notFound = (req, res, next) => {
 };
 
 /** Validation error handler */
-export const validationErrorHandler = errors => {
-  const errorMessages = errors.map(error => ({
+export const validationErrorHandler = (errors) => {
+  const errorMessages = errors.map((error) => ({
     field: error.path,
     message: error.msg,
     value: error.value,
@@ -66,7 +66,7 @@ export const validationErrorHandler = errors => {
 };
 
 /** Database error handler */
-export const handleDatabaseError = error => {
+export const handleDatabaseError = (error) => {
   console.error("Database connection error:", error);
   if (error.name === "MongoNetworkError") {
     throw new ApiError(503, "Database connection failed");

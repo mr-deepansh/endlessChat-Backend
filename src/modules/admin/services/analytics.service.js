@@ -97,7 +97,7 @@ export class AnalyticsService {
     const newUsersToday = todayStats.newUsersToday || 0;
 
     return {
-      userGrowth: result.userGrowth.map(item => ({
+      userGrowth: result.userGrowth.map((item) => ({
         date: `${item._id.year}-${String(item._id.month).padStart(2, "0")}-${String(item._id.day).padStart(2, "0")}`,
         newUsers: item.newUsers,
         totalUsers: item.totalUsers,
@@ -181,7 +181,7 @@ export class AnalyticsService {
     return {
       period,
       days,
-      growth: growth.map(item => ({
+      growth: growth.map((item) => ({
         ...item._id,
         newUsers: item.newUsers,
         activeUsers: item.activeUsers,
@@ -264,7 +264,7 @@ export class AnalyticsService {
 
     // Calculate percentages for role distribution
     const totalUsers = result.roleDistribution.reduce((sum, item) => sum + item.count, 0);
-    const roleDistribution = result.roleDistribution.map(item => ({
+    const roleDistribution = result.roleDistribution.map((item) => ({
       role: item._id,
       count: item.count,
       percentage: totalUsers > 0 ? Math.round((item.count / totalUsers) * 100) : 0,
@@ -272,7 +272,7 @@ export class AnalyticsService {
 
     return {
       roleDistribution,
-      statusDistribution: result.statusDistribution.map(item => ({
+      statusDistribution: result.statusDistribution.map((item) => ({
         status: item._id ? "active" : "inactive",
         count: item.count,
       })),

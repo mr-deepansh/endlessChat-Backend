@@ -45,7 +45,7 @@ const getPM2Info = () => {
   try {
     const output = execSync("pm2 jlist", { encoding: "utf8" });
     const processes = JSON.parse(output);
-    const appProcesses = processes.filter(p => p.name === "social-media-blog-app");
+    const appProcesses = processes.filter((p) => p.name === "social-media-blog-app");
     return appProcesses.length > 0 ? appProcesses : null;
   } catch {
     return null;
@@ -72,7 +72,7 @@ const showServiceInfo = () => {
 
   // Network Information
   console.log("\n🌐 Network Interfaces:");
-  networks.forEach(net => {
+  networks.forEach((net) => {
     console.log(`   ${net.interface}: ${net.ip}`);
   });
 
@@ -80,14 +80,14 @@ const showServiceInfo = () => {
   console.log("\n🔗 Service URLs:");
   console.log(`   Local:   ${protocol}://localhost:${PORT}`);
   if (networks.length > 0) {
-    networks.forEach(net => {
+    networks.forEach((net) => {
       console.log(`   Network: ${protocol}://${net.ip}:${PORT}`);
     });
   }
 
   // API Endpoints
   console.log("\n📡 API Endpoints:");
-  const baseUrls = [`${protocol}://localhost:${PORT}`, ...networks.map(net => `${protocol}://${net.ip}:${PORT}`)];
+  const baseUrls = [`${protocol}://localhost:${PORT}`, ...networks.map((net) => `${protocol}://${net.ip}:${PORT}`)];
   baseUrls.forEach((baseUrl, index) => {
     if (index === 0) {
       console.log(`   Health:  ${baseUrl}/health`);
@@ -122,7 +122,7 @@ const showServiceInfo = () => {
   console.log(
     `   Load Average: ${os
       .loadavg()
-      .map(l => l.toFixed(2))
+      .map((l) => l.toFixed(2))
       .join(", ")}`,
   );
 
