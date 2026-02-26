@@ -38,8 +38,8 @@ const createRedisConfig = (options = {}) => {
 
   return {
     // Connection settings
-    host: process.env.REDIS_HOST || "localhost",
-    port: parseInt(process.env.REDIS_PORT) || 6379,
+    host: process.env.REDISHOST,
+    port: parseInt(process.env.REDISPORT),
     password: getRedisPassword(),
     db: parseInt(process.env.REDIS_DB) || 0,
     keyPrefix: process.env.REDIS_KEY_PREFIX || options.keyPrefix || "",
@@ -83,13 +83,7 @@ const createRedisConfig = (options = {}) => {
     showFriendlyErrorStack: !isProduction,
 
     // TLS configuration for production
-    tls:
-      process.env.REDIS_TLS === "true"
-        ? {
-            servername: process.env.REDIS_HOST,
-            rejectUnauthorized: process.env.REDIS_TLS_REJECT_UNAUTHORIZED !== "false",
-          }
-        : undefined,
+    tls: process.env.NODE_ENV === "production" ? {} : undefined,
 
     // Reconnection strategy
     reconnectOnError: (err) => {

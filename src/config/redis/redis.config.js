@@ -2,8 +2,8 @@
 import Redis from "ioredis";
 
 const redisConfig = {
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
+  host: process.env.REDISHOST,
+  port: process.env.REDISPORT,
   ...(process.env.REDIS_PASSWORD && { password: process.env.REDIS_PASSWORD }),
   db: process.env.REDIS_DB || 0,
   connectTimeout: 10000,
