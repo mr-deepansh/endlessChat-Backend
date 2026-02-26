@@ -1,20 +1,23 @@
 * text=auto eol=lf
 
-*.js     text eol=lf
-*.ts     text eol=lf
-*.json   text eol=lf
-*.yml    text eol=lf
-*.yaml   text eol=lf
-*.md     text eol=lf
-*.html   text eol=lf
-*.css    text eol=lf
-*.scss   text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.sh text eol=lf
+Dockerfile text eol=lf
 
-# Binary files
-*.png    binary
-*.jpg    binary
-*.jpeg   binary
-*.gif    binary
-*.pdf    binary
-*.mp4    binary
-*.zip    binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.mp4 binary
+*.zip binary
