@@ -80,12 +80,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mr-deepansh/social-media-blog-app.git"
+    "url": "https://github.com/mr-deepansh/endlessChat-Backend.git"
   },
   "bugs": {
-    "url": "https://github.com/mr-deepansh/social-media-blog-app/issues"
+    "url": "https://github.com/mr-deepansh/endlessChat-Backend/issues"
   },
-  "homepage": "https://github.com/mr-deepansh/social-media-blog-app#readme",
+  "homepage": "https://github.com/mr-deepansh/endlessChat-Backend#readme",
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"

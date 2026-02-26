@@ -1,7 +1,7 @@
 // server.js
 import http from "http";
-import https from "https"; // ✅ Added for HTTPS
-import fs from "fs"; // ✅ For reading cert and key
+import https from "https";
+import fs from "fs";
 import os from "os";
 import app from "./app.js";
 import { serverConfig } from "./config/index.js";
