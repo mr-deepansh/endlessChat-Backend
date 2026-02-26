@@ -51,19 +51,18 @@ const killPort = async (port) => {
         }
       }
     }
-    // Kill each process
     for (const pid of pids) {
       try {
         execSync(`taskkill /PID ${pid} /F`, { stdio: "ignore" });
         console.log(`🔄 Killed process ${pid} on port ${port}`);
       } catch (killErr) {
-        // Process might already be dead
+        console.error(`❌ Failed to kill process ${pid} on port ${port}:`, killErr.message);
       }
     }
     if (pids.size > 0) {
-      // Wait for processes to fully terminate
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     // Port is free or error occurred - this is fine
   }
@@ -74,33 +73,22 @@ const killPort = async (port) => {
 // ===============================
 const startServer = async () => {
   try {
-    // 🔒 Validate security configuration
     validateSecurityConfig();
-
-    // 🔹 Kill port in development only
     if (serverConfig.nodeEnv === "development" || process.env.NODE_ENV === "development") {
       await killPort(serverConfig.port);
     } else if (serverConfig.nodeEnv === "production") {
-      // Skip port conflict check in production for PM2 managed processes
       logger.info("Production mode - PM2 managed process", { pid: process.pid });
     }
-    // ✅ Connect MongoDB
     await connectDB();
     if (serverConfig.nodeEnv === "development") {
-      // Development logging handled in server startup
+      // Development-specific logic can be added here
     } else {
       logger.info("Database connection established", { database: "MongoDB" });
     }
-    // Always use the same port - development kills existing, production fails
-    const port = serverConfig.port;
+    const port = process.env.PORT;
     const { ip, hostname } = getSystemInfo();
-    // ======================================
-    // ✅ HTTPS Setup (only for development)
-    // Start server with retry logic for development
-    // ======================================
     let server;
     if (serverConfig.httpsEnabled) {
-      // Check if SSL certificates exist
       const keyPath = "D:/Backend/ssl/key.pem";
       const certPath = "D:/Backend/ssl/cert.pem";
       if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
@@ -133,7 +121,6 @@ const startServer = async () => {
             resolve();
           });
         });
-        // Success - show startup info
         const protocol = serverConfig.httpsEnabled ? "https" : "http";
         const startupInfo = {
           port,
@@ -151,7 +138,6 @@ const startServer = async () => {
             health: `${protocol}://${ip}:${port}/health`,
           },
         };
-
         if (serverConfig.nodeEnv === "development") {
           console.log("✅  MongoDB Connected Successfully");
           console.log("⚙️  Server is running at:");
@@ -163,7 +149,6 @@ const startServer = async () => {
           console.log(`🔹 Process ID: ${process.pid}`);
           console.log(`🔹 Hostname: ${hostname}`);
         } else {
-          // Production logging with all details
           logger.info("🚀 SERVER STARTED SUCCESSFULLY", startupInfo);
           logger.info("📍 SERVICE ENDPOINTS", {
             local: startupInfo.urls.local,
@@ -211,12 +196,10 @@ const startServer = async () => {
       const shutdownTimeout = setTimeout(() => {
         logger.error("Forced shutdown due to timeout");
         process.exit(1);
-      }, 15000); // Reduced to 15s for PM2 compatibility
+      }, 15000);
       try {
-        // Stop accepting new connections
         server.close(async () => {
           logger.info("HTTP/HTTPS server closed");
-          // Cleanup connections to prevent duplicates
           try {
             // Close Redis connections
             if (global.redisClients) {
@@ -225,7 +208,6 @@ const startServer = async () => {
                 logger.debug(`Redis client ${name} disconnected`);
               }
             }
-            // Close MongoDB connections
             await disconnectDB();
             logger.info("All database connections closed");
           } catch (dbErr) {
@@ -241,15 +223,12 @@ const startServer = async () => {
         process.exit(1);
       }
     };
-    // Handle termination signals
     process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
     process.on("SIGINT", () => gracefulShutdown("SIGINT"));
-    // ✅ Unified error handling for both modes
     process.on("uncaughtException", async (err) => {
       if (serverConfig.nodeEnv === "development") {
         console.log(`❌ Uncaught Exception: ${err.message}`);
         console.log(err.stack);
-        // Don't exit in development, let nodemon handle restart
       } else {
         logger.error("Uncaught exception detected", {
           error: err.message,
@@ -259,13 +238,12 @@ const startServer = async () => {
         await gracefulShutdown("uncaughtException");
       }
     });
-    process.on("unhandledRejection", async (reason, promise) => {
+    process.on("unhandledRejection", async (reason, _promise) => {
       if (serverConfig.nodeEnv === "development") {
         console.log(`❌ Unhandled Rejection: ${reason?.message || reason}`);
         if (reason?.stack) {
           console.log(reason.stack);
         }
-        // Don't exit in development, let nodemon handle restart
       } else {
         logger.error("Unhandled promise rejection", {
           reason: reason?.message || reason,
