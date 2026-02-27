@@ -7,43 +7,12 @@ import { createSecureRedisClient } from "../middleware/redis-security.middleware
 // Load environment variables
 dotenv.config();
 
-// Security: Strict Redis password validation
-const getRedisPassword = () => {
-  const nodeEnv = (process.env.NODE_ENV || "").trim();
-  const redisPassword = (process.env.REDIS_PASSWORD || "").trim();
-
-  // Production: Password is mandatory
-  if (nodeEnv === "production") {
-    if (!redisPassword) {
-      logger.error("REDIS_PASSWORD is required in production", { NODE_ENV: nodeEnv });
-      throw new Error("Redis password required in production");
-    }
-
-    // Validate password strength
-    if (redisPassword.length < 16) {
-      logger.error("Redis password too weak (minimum 16 characters)", {
-        length: redisPassword.length,
-      });
-      throw new Error("Redis password must be at least 16 characters");
-    }
-  }
-
-  return redisPassword || undefined;
-};
-
 // Enhanced Redis configuration with production optimizations
 const createRedisConfig = (options = {}) => {
   const isProduction = process.env.NODE_ENV === "production";
   const isDevelopment = process.env.NODE_ENV === "development";
 
   return {
-    // Connection settings
-    host: process.env.REDISHOST,
-    port: parseInt(process.env.REDISPORT),
-    password: getRedisPassword(),
-    db: parseInt(process.env.REDIS_DB) || 0,
-    keyPrefix: process.env.REDIS_KEY_PREFIX || options.keyPrefix || "",
-
     // Security: Disable dangerous commands in production
     ...(isProduction && {
       disableOfflineQueue: true,
@@ -51,7 +20,6 @@ const createRedisConfig = (options = {}) => {
     }),
 
     // Connection pool settings for high performance
-    family: 4, // IPv4
     keepAlive: true,
     connectTimeout: isDevelopment ? 10000 : 5000,
     commandTimeout: isDevelopment ? 10000 : 3000,
@@ -82,9 +50,6 @@ const createRedisConfig = (options = {}) => {
     // Error handling
     showFriendlyErrorStack: !isProduction,
 
-    // TLS configuration for production
-    tls: process.env.NODE_ENV === "production" ? {} : undefined,
-
     // Reconnection strategy
     reconnectOnError: (err) => {
       const targetErrors = ["READONLY", "ECONNRESET", "ETIMEDOUT", "ENOTFOUND"];
@@ -101,15 +66,6 @@ const createRedisConfig = (options = {}) => {
 
     // Production optimizations
     enableAutoPipelining: isProduction, // Automatic command batching
-    maxMemoryPolicy: "allkeys-lru", // Memory management
-
-    // Cluster support (if needed)
-    ...(process.env.REDIS_CLUSTER === "true" && {
-      enableReadyCheck: false,
-      redisOptions: {
-        password: getRedisPassword(),
-      },
-    }),
 
     // Override with custom options
     ...options,
@@ -121,27 +77,8 @@ export const createRedisClient = (options = {}) => {
   const clientId = options.keyPrefix || "default";
   const config = createRedisConfig(options);
 
-  // Create Redis client (or cluster if configured)
-  let client;
-
-  if (process.env.REDIS_CLUSTER === "true") {
-    // Redis Cluster configuration
-    const clusterNodes = process.env.REDIS_CLUSTER_NODES?.split(",") || [`${config.host}:${config.port}`];
-
-    client = new Redis.Cluster(clusterNodes, {
-      redisOptions: config,
-      enableReadyCheck: true,
-      maxRetriesPerRequest: config.maxRetriesPerRequest,
-    });
-
-    logger.info(`Redis Cluster client created for ${clientId}`, {
-      nodes: clusterNodes.length,
-      environment: process.env.NODE_ENV,
-    });
-  } else {
-    // Single Redis instance
-    client = new Redis(config);
-  }
+  // Create Redis client using REDIS_URL
+  const client = new Redis(process.env.REDIS_URL, config);
 
   // Enhanced event handling with structured logging
   client.on("error", (err) => {
@@ -154,15 +91,12 @@ export const createRedisClient = (options = {}) => {
   });
 
   client.on("connect", () => {
-    logger.info(`Redis client created for ${clientId}`, {
-      host: config.host,
-      port: config.port,
-    });
+    logger.info(`Redis client created for ${clientId}`);
   });
 
   client.on("ready", () => {
     logger.info(`Redis client initialized for ${clientId}`, {
-      keyPrefix: config.keyPrefix,
+      keyPrefix: options.keyPrefix,
     });
   });
 
@@ -322,7 +256,6 @@ export const rateLimitRedis = clientManager.getClient("rate-limit", {
 export const cacheRedis = clientManager.getClient("cache", {
   // Optimized for caching - allow longer timeouts for large data
   commandTimeout: 5000,
-  maxMemoryPolicy: "allkeys-lru",
 });
 
 export const sessionRedis = clientManager.getClient("session", {

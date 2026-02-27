@@ -11,10 +11,6 @@ class RedisManager {
 
   init() {
     const config = {
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-      ...(process.env.REDIS_PASSWORD && { password: process.env.REDIS_PASSWORD }),
-      db: process.env.REDIS_DB || 0,
       connectTimeout: 5000,
       commandTimeout: 3000,
       retryDelayOnFailover: 100,
@@ -22,12 +18,11 @@ class RedisManager {
       maxRetriesPerRequest: 2,
       enableOfflineQueue: true,
       lazyConnect: false,
-      family: 4,
       keepAlive: true,
       retryStrategy: (times) => (times > 5 ? null : Math.min(times * 50, 1000)),
     };
 
-    this.client = new Redis(config);
+    this.client = new Redis(process.env.REDIS_URL, config);
     this.setupEventHandlers();
   }
 

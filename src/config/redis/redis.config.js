@@ -2,10 +2,6 @@
 import Redis from "ioredis";
 
 const redisConfig = {
-  host: process.env.REDISHOST,
-  port: process.env.REDISPORT,
-  ...(process.env.REDIS_PASSWORD && { password: process.env.REDIS_PASSWORD }),
-  db: process.env.REDIS_DB || 0,
   connectTimeout: 10000,
   commandTimeout: 5000,
   retryDelayOnFailover: 100,
@@ -13,7 +9,6 @@ const redisConfig = {
   maxRetriesPerRequest: 3,
   enableOfflineQueue: true,
   lazyConnect: false,
-  family: 4,
   keepAlive: true,
   retryStrategy: (times) => (times > 10 ? null : Math.min(times * 100, 10000)),
 };
@@ -21,7 +16,7 @@ const redisConfig = {
 let redisClient;
 
 try {
-  redisClient = new Redis(redisConfig);
+  redisClient = new Redis(process.env.REDIS_URL, redisConfig);
 
   redisClient.on("error", (err) => console.error("❌ Redis Error:", err));
   redisClient.on("end", () => console.log("🔌 Redis Disconnected"));
