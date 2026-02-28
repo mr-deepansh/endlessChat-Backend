@@ -28,12 +28,10 @@ import userRoutes from "./modules/users/routes/user.routes.js";
 import blogRoutes from "./modules/blogs/routes/blog.routes.js";
 import notificationRoutes from "./modules/notifications/routes/notification.routes.js";
 
-// Initialize Express app
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 
-// Trust proxy (important for rate limiting and IP detection)
 app.set("trust proxy", 1);
 app.use(timeout("60s"));
 app.use(compression());
@@ -104,10 +102,6 @@ if (serverConfig.nodeEnv === "development") {
 // RATE LIMITING
 // ========================================
 app.use(apiRateLimiter);
-
-// ========================================
-// STATIC FILES
-// ========================================
 app.use("/public", express.static(path.join(__dirname, "../Public")));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/favicon.ico", express.static(path.join(__dirname, "../Public/favicon.ico")));

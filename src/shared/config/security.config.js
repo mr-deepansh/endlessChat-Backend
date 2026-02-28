@@ -26,10 +26,11 @@ export const validateSecurityConfig = () => {
     errors.push("ENCRYPTION_KEY must be at least 32 characters");
   }
 
-  // Redis password validation (production only)
-  if (isProduction) {
-    if (!process.env.REDIS_PASSWORD || process.env.REDIS_PASSWORD.length < 16) {
-      errors.push("REDIS_PASSWORD must be at least 16 characters in production");
+  // Redis validation (production only)
+  if (isProduction && process.env.REDIS_URL) {
+    const passwordMatch = process.env.REDIS_URL.match(/redis:\/\/:([^@]+)@/);
+    if (passwordMatch && passwordMatch[1] && passwordMatch[1].length < 16) {
+      errors.push("REDIS_URL password must be at least 16 characters in production");
     }
   }
 

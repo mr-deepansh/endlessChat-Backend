@@ -145,11 +145,19 @@ export const createRedisClient = (options = {}) => {
   // Add graceful disconnect method
   client.gracefulDisconnect = async () => {
     try {
-      logger.info(`Gracefully disconnecting Redis client (${clientId})`);
-      await client.quit();
+      if (client.status === "ready") {
+        logger.info(`Gracefully disconnecting Redis client (${clientId})`);
+        await client.quit();
+      } else {
+        client.disconnect();
+      }
     } catch (error) {
       logger.error(`Error during graceful disconnect (${clientId})`, error);
-      client.disconnect();
+      try {
+        client.disconnect();
+      } catch (e) {
+        // Ignore disconnect errors
+      }
     }
   };
 

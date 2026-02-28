@@ -3,21 +3,20 @@ import fs from "fs";
 
 // Validate environment variables
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-  console.error("❌ Missing Cloudinary credentials:", {
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME ? "SET" : "MISSING",
-    api_key: process.env.CLOUDINARY_API_KEY ? "SET" : "MISSING",
-    api_secret: process.env.CLOUDINARY_API_SECRET ? "SET" : "MISSING",
+  console.warn("⚠️ Cloudinary credentials missing - file uploads will be disabled");
+} else {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
   });
-  throw new Error("Cloudinary credentials are not properly configured");
 }
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 export const uploadToCloudinary = async (filePath, folder = "posts", resourceType = "auto") => {
+  if (!process.env.CLOUDINARY_CLOUD_NAME) {
+    throw new Error("Cloudinary not configured");
+  }
+
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       folder,
