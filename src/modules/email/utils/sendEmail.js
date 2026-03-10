@@ -1,15 +1,5 @@
 import nodemailer from "nodemailer";
 
-/**
- * Send email with HTML and text support
- * @param {Object} options - Email options
- * @param {string} options.email - Recipient email
- * @param {string} options.subject - Email subject
- * @param {string} options.html - HTML content (optional)
- * @param {string} options.text - Plain text content (optional)
- * @param {string} options.message - Legacy text message (fallback)
- * @returns {Promise<void>}
- */
 export const sendEmail = async ({ email, subject, html, text, message }) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -21,18 +11,14 @@ export const sendEmail = async ({ email, subject, html, text, message }) => {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-
-    // Use provided text or fallback to message
     const textContent = text || message || "";
-
     const mailOptions = {
       from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
       to: email,
       subject,
       text: textContent,
-      ...(html && { html }), // Only include html if provided
+      ...(html && { html }),
     };
-
     const result = await transporter.sendMail(mailOptions);
     console.log(`✅ Email sent to ${email}`, result.messageId);
     return result;
@@ -42,15 +28,6 @@ export const sendEmail = async ({ email, subject, html, text, message }) => {
   }
 };
 
-/**
- * Send HTML email with fallback to text
- * @param {Object} options - Email options
- * @param {string} options.email - Recipient email
- * @param {string} options.subject - Email subject
- * @param {string} options.html - HTML content
- * @param {string} options.text - Plain text fallback
- * @returns {Promise<void>}
- */
 export const sendHtmlEmail = async ({ email, subject, html, text }) => {
   return await sendEmail({ email, subject, html, text });
 };

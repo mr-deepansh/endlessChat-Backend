@@ -17,7 +17,6 @@ const getSystemInfo = () => {
   const isDev = serverConfig.nodeEnv === "development";
   const nets = os.networkInterfaces();
   let localIp = "localhost";
-
   if (isDev) {
     for (const name in nets) {
       for (const net of nets[name]) {
@@ -38,7 +37,6 @@ const getSystemInfo = () => {
 // ==============================================
 const killPort = async (port) => {
   try {
-    // Find processes using the port
     const output = execSync(`netstat -ano | findstr :${port}`, { encoding: "utf8" });
     const lines = output.trim().split("\n");
     const pids = new Set();
@@ -62,7 +60,6 @@ const killPort = async (port) => {
     if (pids.size > 0) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
-    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     // Port is free or error occurred - this is fine
   }
@@ -81,7 +78,7 @@ const startServer = async () => {
     }
     await connectDB();
     if (serverConfig.nodeEnv === "development") {
-      // Development-specific logic can be added here
+      //
     } else {
       logger.info("Database connection established", { database: "MongoDB" });
     }
@@ -201,7 +198,6 @@ const startServer = async () => {
         server.close(async () => {
           logger.info("HTTP/HTTPS server closed");
           try {
-            // Close Redis connections
             if (global.redisClients) {
               for (const [name, client] of global.redisClients) {
                 await client.quit();

@@ -13,7 +13,6 @@ export const sendEmail = async ({ email, subject, message }) => {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-
     const mailOptions = {
       from: {
         name: process.env.EMAIL_FROM_NAME || "Social Media Blog",
@@ -23,7 +22,6 @@ export const sendEmail = async ({ email, subject, message }) => {
       subject,
       html: message,
     };
-
     await transporter.sendMail(mailOptions);
     console.log(`✅ Email sent successfully to ${email}`);
   } catch (error) {
